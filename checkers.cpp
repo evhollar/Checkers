@@ -1,5 +1,6 @@
 //
 // Created by Bastien Taylor on 11/13/17.
+// Modified by Evan Hollar on 11/13/17
 //
 
 #include "checkers.h"
@@ -18,12 +19,20 @@ Board::Board(){
 /*
  * Requires: Nothing
  * Modifies: Nothing
- * Effects: Return all pieces
+ * Effects: Return a vector of the red pieces
  */
-Piece Board::getPieces(){
+vector<Piece> Board::getRedPieces(){
 
 }
 
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Return a vector of the black pieces
+ */
+vector<Piece> Board::getBlackPieces() {
+
+}
 /*
  * Requires: Nothing
  * Modifies: Nothing
@@ -126,34 +135,6 @@ BasicPiece::BasicPiece(int c, point p){
 
 }
 
-//Getters
-/*
-* Requires: Nothing
-* Modifies: Nothing
-* Effects: Returns int specifying color
-*/
-int BasicPiece::getColor(){
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Returns the position of the piece
- */
-point BasicPiece::getPosition(){
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Captures the piece
- */
-void BasicPiece::capture(){
-
-}
-
 /*
  * Requires: point position
  * Modifies: Position
@@ -182,33 +163,6 @@ KingPiece::KingPiece(int c, point p){
 
 }
 
-//Getters
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Returns int specifying color
- */
-int KingPiece::getColor(){
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Returns the position of the piece
- */
-point KingPiece::getPosition(){
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Captures the piece
- */
-void KingPiece::capture(){
-
-}
 
 /*
  * Requires: point position

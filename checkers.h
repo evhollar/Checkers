@@ -1,5 +1,6 @@
 //
 // Created by Bastien Taylor on 11/13/17.
+//// Modified by Evan Hollar on 11/13/17
 //
 
 #ifndef JEB2020_CHECKERS_H
@@ -34,9 +35,16 @@ public:
     /*
      * Requires: Nothing
      * Modifies: Nothing
-     * Effects: Return all pieces
+     * Effects: Return a vector of the red pieces
      */
-    Piece getPieces();
+    vector<Piece> getRedPieces();
+
+    /*
+    * Requires: Nothing
+    * Modifies: Nothing
+    * Effects: Return a vector of the black pieces
+    */
+    vector<Piece> getBlackPieces();
 
     /*
      * Requires: Nothing
@@ -106,14 +114,14 @@ public:
      * Modifies: Nothing
      * Effects: Captures the piece
      */
-    virtual void capture();
+    void capture();
 
     /*
      * Requires: Nothing
      * Modifies: Nothing
      * Effects: Returns an int specifying color of the piece
      */
-    virtual int getColor();
+    int getColor();
 
     /*
      * Requires: point Position
@@ -132,28 +140,6 @@ public:
      * Effects: Creates a piece with color c at point p
      */
     BasicPiece(int c, point p);
-
-    //Getters
-    /*
-    * Requires: Nothing
-    * Modifies: Nothing
-    * Effects: Returns int specifying color
-    */
-    int getColor() override;
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Returns the position of the piece
-     */
-    point getPosition() override;
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Captures the piece
-     */
-    void capture() override;
 
     /*
      * Requires: point position
@@ -180,28 +166,6 @@ public:
     * Effects: Creates a piece with color c at point p
     */
     KingPiece(int c, point p);
-
-    //Getters
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Returns int specifying color
-     */
-    int getColor() override;
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Returns the position of the piece
-     */
-    point getPosition() override;
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Captures the piece
-     */
-    void capture() override;
 
     /*
      * Requires: point position

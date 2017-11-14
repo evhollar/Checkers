@@ -4,35 +4,6 @@
 
 #include "checkers.h"
 
-// Constructors
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Creates a Board object
- */
-Board::Board(){
-
-}
-
-//Getters
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Return all pieces
- */
-Piece Board::getPieces(){
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Draws the board with all pieces
- */
-void Board::draw(){
-
-}
-
 /*
  * Requires: Nothing
  * Modifies: Nothing
@@ -76,7 +47,8 @@ void Menu::restartGame(){
  * Effects: Creates a piece
  */
 Piece::Piece(){
-
+    color = 1;
+    position = {0,0};
 }
 
 //Getters
@@ -86,7 +58,7 @@ Piece::Piece(){
  * Effects: Gets the position of the piece
  */
 point Piece::getPosition(){
-
+    return position;
 }
 
 /*
@@ -104,7 +76,7 @@ void Piece::capture(){
  * Effects: Returns an int specifying color of the piece
  */
 int Piece::getColor(){
-
+    return color;
 }
 
 /*
@@ -113,8 +85,47 @@ int Piece::getColor(){
  * Effects: Moves the piece
  */
 void Piece::movePiece(point p){
+    position = p;
+}
+
+// Constructors
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Creates a Board object
+ */
+Board::Board(){
 
 }
+
+//Getters
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Return all red pieces
+ */
+vector<Piece> Board::getRedPieces(){
+    return redPieces;
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Return all black pieces
+ */
+vector<Piece> Board::getBlackPieces(){
+    return blackPieces;
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Draws the board with all pieces
+ */
+void Board::draw(){
+
+}
+
 
 //Constructor
 /*
@@ -123,7 +134,8 @@ void Piece::movePiece(point p){
  * Effects: Creates a piece with color c at point p
  */
 BasicPiece::BasicPiece(int c, point p){
-
+    color = c;
+    position = p;
 }
 
 //Getters
@@ -133,7 +145,7 @@ BasicPiece::BasicPiece(int c, point p){
 * Effects: Returns int specifying color
 */
 int BasicPiece::getColor(){
-
+    return color;
 }
 
 /*
@@ -142,7 +154,7 @@ int BasicPiece::getColor(){
  * Effects: Returns the position of the piece
  */
 point BasicPiece::getPosition(){
-
+    return position;
 }
 
 /*
@@ -160,7 +172,7 @@ void BasicPiece::capture(){
  * Effects: Moves the piece to position p
  */
 void BasicPiece::movePiece(point p){
-
+    position = p;
 }
 
 /*
@@ -179,7 +191,8 @@ void BasicPiece::upgradePiece(){
 * Effects: Creates a piece with color c at point p
 */
 KingPiece::KingPiece(int c, point p){
-
+    color = c;
+    position = p;
 }
 
 //Getters
@@ -189,7 +202,7 @@ KingPiece::KingPiece(int c, point p){
  * Effects: Returns int specifying color
  */
 int KingPiece::getColor(){
-
+    return color;
 }
 
 /*
@@ -198,7 +211,7 @@ int KingPiece::getColor(){
  * Effects: Returns the position of the piece
  */
 point KingPiece::getPosition(){
-
+    return position;
 }
 
 /*
@@ -216,5 +229,5 @@ void KingPiece::capture(){
  * Effects: Moves the piece to position p
  */
 void KingPiece::movePiece(point p){
-
+    position = p;
 }

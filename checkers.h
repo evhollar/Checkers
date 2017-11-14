@@ -14,38 +14,6 @@ struct point{
     int y;
 };
 
-class Board{
-private:
-    int turn;
-    int size;
-    vector<Piece> redPieces;
-    vector<Piece> blackPieces;
-
-public:
-    // Constructors
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Creates a Board object
-     */
-    Board();
-
-    //Getters
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Return all pieces
-     */
-    Piece getPieces();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Draws the board with all pieces
-     */
-    void draw();
-};
-
 class Menu{
 public:
     /*
@@ -80,11 +48,13 @@ public:
 
 class Piece{
 private:
+
+
+public:
     int color;
     int taken;
     point position;
 
-public:
     //Constructor
     /*
      * Requires: Nothing
@@ -121,6 +91,45 @@ public:
      * Effects: Moves the piece
      */
     virtual void movePiece(point p);
+};
+
+class Board{
+private:
+    int turn;
+    int size;
+    vector<Piece> redPieces;
+    vector<Piece> blackPieces;
+
+public:
+    // Constructors
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Creates a Board object
+     */
+    Board();
+
+    //Getters
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Return all pieces
+     */
+    vector<Piece> getRedPieces();
+
+    /*
+    * Requires: Nothing
+    * Modifies: Nothing
+    * Effects: Return all pieces
+    */
+    vector<Piece> getBlackPieces();
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Draws the board with all pieces
+     */
+    void draw();
 };
 
 class BasicPiece : public Piece{

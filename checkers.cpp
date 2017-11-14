@@ -79,15 +79,6 @@ int Piece::getColor(){
     return color;
 }
 
-/*
- * Requires: point Position
- * Modifies: Position of the piece
- * Effects: Moves the piece
- */
-void Piece::movePiece(point p){
-    position = p;
-}
-
 // Constructors
 /*
  * Requires: Nothing
@@ -138,34 +129,6 @@ BasicPiece::BasicPiece(int c, point p){
     position = p;
 }
 
-//Getters
-/*
-* Requires: Nothing
-* Modifies: Nothing
-* Effects: Returns int specifying color
-*/
-int BasicPiece::getColor(){
-    return color;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Returns the position of the piece
- */
-point BasicPiece::getPosition(){
-    return position;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Captures the piece
- */
-void BasicPiece::capture(){
-
-}
-
 /*
  * Requires: point position
  * Modifies: Position
@@ -193,34 +156,6 @@ void BasicPiece::upgradePiece(){
 KingPiece::KingPiece(int c, point p){
     color = c;
     position = p;
-}
-
-//Getters
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Returns int specifying color
- */
-int KingPiece::getColor(){
-    return color;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Returns the position of the piece
- */
-point KingPiece::getPosition(){
-    return position;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Captures the piece
- */
-void KingPiece::capture(){
-
 }
 
 /*

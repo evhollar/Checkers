@@ -47,13 +47,12 @@ public:
 };
 
 class Piece{
-private:
-
-
-public:
+protected:
     int color;
     int taken;
     point position;
+
+public:
 
     //Constructor
     /*
@@ -69,28 +68,28 @@ public:
      * Modifies: Nothing
      * Effects: Gets the position of the piece
      */
-    virtual point getPosition();
+    point getPosition();
 
     /*
      * Requires: Nothing
      * Modifies: Nothing
      * Effects: Captures the piece
      */
-    virtual void capture();
+    void capture();
 
     /*
      * Requires: Nothing
      * Modifies: Nothing
      * Effects: Returns an int specifying color of the piece
      */
-    virtual int getColor();
+    int getColor();
 
     /*
      * Requires: point Position
      * Modifies: Position of the piece
      * Effects: Moves the piece
      */
-    virtual void movePiece(point p);
+    virtual void movePiece(point p) = 0;
 };
 
 class Board{
@@ -142,28 +141,6 @@ public:
      */
     BasicPiece(int c, point p);
 
-    //Getters
-    /*
-    * Requires: Nothing
-    * Modifies: Nothing
-    * Effects: Returns int specifying color
-    */
-    int getColor() override;
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Returns the position of the piece
-     */
-    point getPosition() override;
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Captures the piece
-     */
-    void capture() override;
-
     /*
      * Requires: point position
      * Modifies: Position
@@ -189,28 +166,6 @@ public:
     * Effects: Creates a piece with color c at point p
     */
     KingPiece(int c, point p);
-
-    //Getters
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Returns int specifying color
-     */
-    int getColor() override;
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Returns the position of the piece
-     */
-    point getPosition() override;
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Captures the piece
-     */
-    void capture() override;
 
     /*
      * Requires: point position

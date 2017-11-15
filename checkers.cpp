@@ -10,7 +10,7 @@
  * Effects: Saves the game
  */
 void Menu::saveGame(){
-
+    
 }
 
 /*
@@ -79,45 +79,6 @@ int Piece::getColor(){
     return color;
 }
 
-// Constructors
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Creates a Board object
- */
-Board::Board(){
-
-}
-
-//Getters
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Return all red pieces
- */
-vector<Piece> Board::getRedPieces(){
-    return redPieces;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Return all black pieces
- */
-vector<Piece> Board::getBlackPieces(){
-    return blackPieces;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Draws the board with all pieces
- */
-void Board::draw(){
-
-}
-
-
 //Constructor
 /*
  * Requires: Int for color and point for position
@@ -134,7 +95,7 @@ BasicPiece::BasicPiece(int c, point p){
  * Modifies: Position
  * Effects: Moves the piece to position p
  */
-void BasicPiece::movePiece(point p){
+void BasicPiece::movePiece(point p) {
     position = p;
 }
 
@@ -163,6 +124,62 @@ KingPiece::KingPiece(int c, point p){
  * Modifies: Position
  * Effects: Moves the piece to position p
  */
-void KingPiece::movePiece(point p){
+void KingPiece::movePiece(point p) {
     position = p;
+}
+
+// Constructors
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Creates a Board object
+ */
+Board::Board(){
+
+}
+
+//Getters
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Return all pieces
+ */
+vector<BasicPiece> Board::getRedBasicPieces(){
+    return redBasicPieces;
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Return all pieces
+ */
+vector<KingPiece> Board::getRedKingPieces(){
+    return redKingPieces;
+}
+
+/*
+* Requires: Nothing
+* Modifies: Nothing
+* Effects: Return all pieces
+*/
+vector<BasicPiece> Board::getBlackBasicPieces(){
+    return blackBasicPieces;
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Return all pieces
+ */
+vector<KingPiece> Board::getBlackKingPieces(){
+    return blackKingPieces;
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Draws the board with all pieces
+ */
+void Board::draw(){
+
 }

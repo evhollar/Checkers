@@ -49,7 +49,7 @@ public:
 class Piece{
 protected:
     int color;
-    int taken;
+    bool taken;
     point position;
 
 public:
@@ -90,45 +90,6 @@ public:
      * Effects: Moves the piece
      */
     virtual void movePiece(point p) = 0;
-};
-
-class Board{
-private:
-    int turn;
-    int size;
-    vector<Piece> redPieces;
-    vector<Piece> blackPieces;
-
-public:
-    // Constructors
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Creates a Board object
-     */
-    Board();
-
-    //Getters
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Return all pieces
-     */
-    vector<Piece> getRedPieces();
-
-    /*
-    * Requires: Nothing
-    * Modifies: Nothing
-    * Effects: Return all pieces
-    */
-    vector<Piece> getBlackPieces();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Draws the board with all pieces
-     */
-    void draw();
 };
 
 class BasicPiece : public Piece{
@@ -174,6 +135,61 @@ public:
      */
     void movePiece(point p) override;
 
+};
+
+class Board{
+private:
+    int turn;
+    int size;
+    vector<BasicPiece> redBasicPieces;
+    vector<KingPiece> redKingPieces;
+    vector<BasicPiece> blackBasicPieces;
+    vector<KingPiece> blackKingPieces;
+
+public:
+    // Constructors
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Creates a Board object
+     */
+    Board();
+
+    //Getters
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Return all pieces
+     */
+    vector<BasicPiece> getRedBasicPieces();
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Return all pieces
+     */
+    vector<KingPiece> getRedKingPieces();
+
+    /*
+    * Requires: Nothing
+    * Modifies: Nothing
+    * Effects: Return all pieces
+    */
+    vector<BasicPiece> getBlackBasicPieces();
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Return all pieces
+     */
+    vector<KingPiece> getBlackKingPieces();
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Draws the board with all pieces
+     */
+    void draw();
 };
 
 #endif //JEB2020_CHECKERS_H

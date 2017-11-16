@@ -117,6 +117,19 @@ string KingPiece::getType() const {
     return "king";
 }
 
+EmptyPiece::EmptyPiece(point p) : Piece() {
+    position = p;
+    type = "empty";
+}
+
+string EmptyPiece::getType() const {
+    return "empty";
+}
+
+void EmptyPiece::movePiece(point p) {
+    position = p;
+}
+
 // Constructors
 /*
  * Requires: Nothing
@@ -124,6 +137,22 @@ string KingPiece::getType() const {
  * Effects: Creates a Board object
  */
 Board::Board(){
+
+    // first x
+    for ( int c = 0; c < 8 ; ++c)
+    {
+        //Creates a vector of pieces for each column of the board
+        vector<unique_ptr<Piece>> col;
+
+        //Adds an empty piece to each spot in the vector
+        for ( int r = 0; r < 8 ; ++r)
+        {
+            col.push_back(unique_ptr<Piece>(new EmptyPiece({c, r})));
+        }
+
+        //Adds the column vector to the vector of columns, aka the board.
+        pieces.push_back(move(col));
+    }
 }
 
 /*
@@ -140,14 +169,16 @@ void Board::draw(){
  * Modifies: Nothing
  * Effects: Saves the game by storing the positions, types, and colors of all pieces on the board.
  */
-void Menu::saveGame(const vector<unique_ptr<Piece>> &pieces) {
+void Menu::saveGame(const vector<vector<unique_ptr<Piece>>> &pieces) {
     ofstream f_out("checkersSaveData.txt", ios::app);
     if (f_out) {
-        for (int i = 0; i < pieces.size(); i++) {
-            f_out << pieces[i]->getType() << endl;
-            f_out << pieces[i]->getPosition().x << endl;
-            f_out << pieces[i]->getPosition().y << endl;
-            f_out << pieces[i]->getColor() << endl;
+        for (int c = 0; c < pieces.size(); c++) {
+            for (int r = 0; r < pieces.size(); r++) {
+                f_out << pieces[c][r]->getType() << endl;
+                f_out << pieces[c][r]->getPosition().x << endl;
+                f_out << pieces[c][r]->getPosition().y << endl;
+                f_out << pieces[c][r]->getColor() << endl;
+            }
         }
         f_out.close();
     }

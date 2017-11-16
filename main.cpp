@@ -59,6 +59,7 @@ int main() {
     menu1.loadGame("checkersSaveData.txt", board2.pieces);
 
     board2.pieces[0][0]->draw();
+    board2.pieces[1][0]->draw();
 
     return 0;
 }

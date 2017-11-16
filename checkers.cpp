@@ -209,7 +209,7 @@ void Menu::loadGame(string fileName){
             f_in >> tempColor;
             BasicPiece tempBasic = BasicPiece(tempColor, {tempX, tempY});
             if(tempColor == 0){
-                
+
             }
         }
 

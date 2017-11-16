@@ -198,14 +198,14 @@ void Menu::saveGame(const vector<vector<unique_ptr<Piece>>> &pieces) {
  * Modifies: Nothing
  * Effects: Loads the game. Currently DOES NOT WORK
  */
-void Menu::loadGame(string fileName, vector<vector<unique_ptr<Piece>>> pieces){
+void Menu::loadGame(string fileName, vector<vector<unique_ptr<Piece>>> &pieces){
     ifstream f_in(fileName);
     if (f_in){
         string word = "";
         int tempX;
         int tempY;
         int tempColor;
-        f_in >> word;
+        getline(f_in, word);
         if(word == "empty") {
             f_in >> tempX;
             f_in >> tempY;
@@ -221,7 +221,6 @@ void Menu::loadGame(string fileName, vector<vector<unique_ptr<Piece>>> pieces){
             f_in >> tempY;
             f_in >> tempColor;
             pieces[tempX][tempY] = make_unique<KingPiece>(KingPiece(tempColor, {tempX, tempY}));
-
         }
 
     }

@@ -181,7 +181,7 @@ public:
      * Modifies: Nothing
      * Effects: Loads the game
      */
-    void loadGame(string fileName, vector<vector<unique_ptr<Piece>>> pieces);
+    void loadGame(string fileName, vector<vector<unique_ptr<Piece>>> &pieces);
 
     /*
      * Requires: Nothing

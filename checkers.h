@@ -161,6 +161,10 @@ public:
      */
     void draw();
 
+    void capturePiece(int x, int y);
+
+    void movePiece(int x1, int y1, int x2, int y2);
+
 };
 
 class Menu{
@@ -177,7 +181,7 @@ public:
      * Modifies: Nothing
      * Effects: Loads the game
      */
-    void loadGame(string fileName, vector<unique_ptr<Piece>> pieces);
+    void loadGame(string fileName, vector<vector<unique_ptr<Piece>>> pieces);
 
     /*
      * Requires: Nothing

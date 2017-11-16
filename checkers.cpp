@@ -138,7 +138,7 @@ void EmptyPiece::movePiece(point p) {
  */
 Board::Board(){
 
-    // first x
+    //Cycle through all the columns
     for ( int c = 0; c < 8 ; ++c)
     {
         //Creates a vector of pieces for each column of the board
@@ -163,6 +163,15 @@ Board::Board(){
 void Board::draw(){
 
 }
+
+void Board::capturePiece(int x, int y) {
+    pieces[x][y] = make_unique<EmptyPiece>(EmptyPiece({x, y}));
+}
+
+/*void Board::movePiece(int x1, int y1, int x2, int y2) {
+    pieces[x2][y2] =
+    pieces[x1][y1] = make_unique<EmptyPiece>(EmptyPiece({x1, y1}));
+}*/
 
 /*
  * Requires: Nothing
@@ -189,7 +198,7 @@ void Menu::saveGame(const vector<vector<unique_ptr<Piece>>> &pieces) {
  * Modifies: Nothing
  * Effects: Loads the game. Currently DOES NOT WORK
  */
-void Menu::loadGame(string fileName, vector<unique_ptr<Piece>> pieces){
+void Menu::loadGame(string fileName, vector<vector<unique_ptr<Piece>>> pieces){
     ifstream f_in(fileName);
     if (f_in){
         string word = "";
@@ -197,18 +206,21 @@ void Menu::loadGame(string fileName, vector<unique_ptr<Piece>> pieces){
         int tempY;
         int tempColor;
         f_in >> word;
-        if(word == "basic"){
+        if(word == "empty") {
             f_in >> tempX;
             f_in >> tempY;
             f_in >> tempColor;
-            BasicPiece tempBasic = BasicPiece(tempColor, {tempX, tempY});
-            pieces.push_back(make_unique<BasicPiece>(tempBasic));
+            pieces[tempX][tempY] = make_unique<EmptyPiece>(EmptyPiece({tempX, tempY}));
+        } if(word == "basic"){
+            f_in >> tempX;
+            f_in >> tempY;
+            f_in >> tempColor;
+            pieces[tempX][tempY] = make_unique<BasicPiece>(BasicPiece(tempColor, {tempX, tempY}));
         } if (word == "king"){
             f_in >> tempX;
             f_in >> tempY;
             f_in >> tempColor;
-            KingPiece tempKing = KingPiece(tempColor, {tempX, tempY});
-                pieces.push_back(make_unique<KingPiece>(tempKing));
+            pieces[tempX][tempY] = make_unique<KingPiece>(KingPiece(tempColor, {tempX, tempY}));
 
         }
 

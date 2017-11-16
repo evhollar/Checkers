@@ -5,6 +5,8 @@
 #ifndef JEB2020_CHECKERS_H
 #define JEB2020_CHECKERS_H
 
+#include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -14,43 +16,12 @@ struct point{
     int y;
 };
 
-class Menu{
-public:
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Saves the game
-     */
-    void saveGame();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Loads the game
-     */
-    void loadGame();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Exits the game
-     */
-    void exitGame();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Restarts the game
-     */
-    void restartGame();
-
-};
-
 class Piece{
 protected:
     int color;
     bool taken;
     point position;
+    string type;
 
 public:
 
@@ -83,6 +54,9 @@ public:
      * Effects: Returns an int specifying color of the piece
      */
     int getColor();
+
+
+    string getType();
 
     /*
      * Requires: point Position
@@ -184,12 +158,45 @@ public:
      */
     vector<KingPiece> getBlackKingPieces();
 
+
     /*
      * Requires: Nothing
      * Modifies: Nothing
      * Effects: Draws the board with all pieces
      */
     void draw();
+};
+
+class Menu{
+public:
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Saves the game
+     */
+    void saveGame(vector<BasicPiece> rbp, vector<BasicPiece> bbp, vector<KingPiece> rkp, vector<KingPiece> bkp);
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Loads the game
+     */
+    void loadGame(string fileName);
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Exits the game
+     */
+    void exitGame();
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Restarts the game
+     */
+    void restartGame();
+
 };
 
 #endif //JEB2020_CHECKERS_H

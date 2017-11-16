@@ -4,42 +4,6 @@
 
 #include "checkers.h"
 
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Saves the game
- */
-void Menu::saveGame(){
-    
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Loads the game
- */
-void Menu::loadGame(){
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Exits the game
- */
-void Menu::exitGame(){
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Restarts the game
- */
-void Menu::restartGame(){
-
-}
-
 //Constructor
 /*
  * Requires: Nothing
@@ -79,6 +43,10 @@ int Piece::getColor(){
     return color;
 }
 
+string Piece::getType() {
+    return type;
+}
+
 //Constructor
 /*
  * Requires: Int for color and point for position
@@ -88,6 +56,7 @@ int Piece::getColor(){
 BasicPiece::BasicPiece(int c, point p){
     color = c;
     position = p;
+    type = "basic";
 }
 
 /*
@@ -117,6 +86,7 @@ void BasicPiece::upgradePiece(){
 KingPiece::KingPiece(int c, point p){
     color = c;
     position = p;
+    type = "king";
 }
 
 /*
@@ -181,5 +151,86 @@ vector<KingPiece> Board::getBlackKingPieces(){
  * Effects: Draws the board with all pieces
  */
 void Board::draw(){
+
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Saves the game
+ */
+void Menu::saveGame(vector<BasicPiece> rbp, vector<BasicPiece> bbp, vector<KingPiece> rkp, vector<KingPiece> bkp){
+    ofstream f_out("checkersSaveData.txt", ios::app);
+    if (f_out){
+        for(int i = 0; i < rbp.size(); i++){
+            f_out << rbp[i].getType() << endl;
+            f_out << rbp[i].getPosition().x << endl;
+            f_out << rbp[i].getPosition().y << endl;
+            f_out << rbp[i].getColor() << endl;
+        }
+        for(int i = 0; i < bbp.size(); i++){
+            f_out << bbp[i].getType() << endl;
+            f_out << bbp[i].getPosition().x << endl;
+            f_out << bbp[i].getPosition().y << endl;
+            f_out << bbp[i].getColor() << endl;
+        }
+        for(int i = 0; i < rkp.size(); i++){
+            f_out << rkp[i].getType() << endl;
+            f_out << rkp[i].getPosition().x << endl;
+            f_out << rkp[i].getPosition().y << endl;
+            f_out << rkp[i].getColor() << endl;
+        }
+        for(int i = 0; i < bkp.size(); i++){
+            f_out << bkp[i].getType() << endl;
+            f_out << bkp[i].getPosition().x << endl;
+            f_out << bkp[i].getPosition().y << endl;
+            f_out << bkp[i].getColor() << endl;
+        }
+    }
+    f_out.close();
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Loads the game
+ */
+void Menu::loadGame(string fileName){
+    ifstream f_in(fileName);
+    if (f_in){
+        string word = "";
+        int tempX;
+        int tempY;
+        int tempColor;
+        f_in >> word;
+        if(word == "basic"){
+            f_in >> tempX;
+            f_in >> tempY;
+            f_in >> tempColor;
+            BasicPiece tempBasic = BasicPiece(tempColor, {tempX, tempY});
+            if(tempColor == 0){
+                
+            }
+        }
+
+    }
+
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Exits the game
+ */
+void Menu::exitGame(){
+
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Restarts the game
+ */
+void Menu::restartGame(){
 
 }

@@ -174,14 +174,14 @@ public:
      * Modifies: Nothing
      * Effects: Saves the game
      */
-    void saveGame(vector<BasicPiece> rbp, vector<BasicPiece> bbp, vector<KingPiece> rkp, vector<KingPiece> bkp);
+    void saveGame(vector<BasicPiece> &rbp, vector<BasicPiece> &bbp, vector<KingPiece> &rkp, vector<KingPiece> &bkp);
 
     /*
      * Requires: Nothing
      * Modifies: Nothing
      * Effects: Loads the game
      */
-    void loadGame(string fileName);
+    void loadGame(string fileName, vector<BasicPiece> &rbp, vector<BasicPiece> &bbp, vector<KingPiece> &rkp, vector<KingPiece> &bkp);
 
     /*
      * Requires: Nothing

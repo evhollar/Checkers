@@ -36,6 +36,11 @@ int main() {
     board1.pieces[2][5]->draw();
     board1.pieces[4][6]->draw();
 
+    board1.movePiece(2,5,4,6);
+
+    board1.pieces[2][5]->draw();
+    board1.pieces[4][6]->draw();
+
     Menu menu1 = Menu();
 
     Board board2;

@@ -43,8 +43,9 @@ int Piece::getColor(){
     return color;
 }
 
-string Piece::getType() {
-    return type;
+void Piece::draw(){
+    cout << getType() << " piece is located at ("
+         << getPosition().x << "," << getPosition().y << ")" << endl;
 }
 
 //Constructor
@@ -77,6 +78,15 @@ void BasicPiece::upgradePiece(){
 
 }
 
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Returns the type of the piece
+ */
+string BasicPiece::getType() const {
+    return "basic";
+}
+
 //Constructor
 /*
 * Requires: Int for color and point for position
@@ -98,6 +108,28 @@ void KingPiece::movePiece(point p) {
     position = p;
 }
 
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Returns the type of the piece
+ */
+string KingPiece::getType() const {
+    return "king";
+}
+
+EmptyPiece::EmptyPiece(point p) : Piece() {
+    position = p;
+    type = "empty";
+}
+
+string EmptyPiece::getType() const {
+    return "empty";
+}
+
+void EmptyPiece::movePiece(point p) {
+    position = p;
+}
+
 // Constructors
 /*
  * Requires: Nothing
@@ -106,43 +138,21 @@ void KingPiece::movePiece(point p) {
  */
 Board::Board(){
 
-}
+    // first x
+    for ( int c = 0; c < 8 ; ++c)
+    {
+        //Creates a vector of pieces for each column of the board
+        vector<unique_ptr<Piece>> col;
 
-//Getters
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Return all pieces
- */
-vector<BasicPiece> Board::getRedBasicPieces(){
-    return redBasicPieces;
-}
+        //Adds an empty piece to each spot in the vector
+        for ( int r = 0; r < 8 ; ++r)
+        {
+            col.push_back(unique_ptr<Piece>(new EmptyPiece({c, r})));
+        }
 
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Return all pieces
- */
-vector<KingPiece> Board::getRedKingPieces(){
-    return redKingPieces;
-}
-
-/*
-* Requires: Nothing
-* Modifies: Nothing
-* Effects: Return all pieces
-*/
-vector<BasicPiece> Board::getBlackBasicPieces(){
-    return blackBasicPieces;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Return all pieces
- */
-vector<KingPiece> Board::getBlackKingPieces(){
-    return blackKingPieces;
+        //Adds the column vector to the vector of columns, aka the board.
+        pieces.push_back(move(col));
+    }
 }
 
 /*
@@ -157,45 +167,29 @@ void Board::draw(){
 /*
  * Requires: Nothing
  * Modifies: Nothing
- * Effects: Saves the game
+ * Effects: Saves the game by storing the positions, types, and colors of all pieces on the board.
  */
-void Menu::saveGame(vector<BasicPiece> &rbp, vector<BasicPiece> &bbp, vector<KingPiece> &rkp, vector<KingPiece> &bkp){
+void Menu::saveGame(const vector<vector<unique_ptr<Piece>>> &pieces) {
     ofstream f_out("checkersSaveData.txt", ios::app);
-    if (f_out){
-        for(int i = 0; i < rbp.size(); i++){
-            f_out << rbp[i].getType() << endl;
-            f_out << rbp[i].getPosition().x << endl;
-            f_out << rbp[i].getPosition().y << endl;
-            f_out << rbp[i].getColor() << endl;
+    if (f_out) {
+        for (int c = 0; c < pieces.size(); c++) {
+            for (int r = 0; r < pieces.size(); r++) {
+                f_out << pieces[c][r]->getType() << endl;
+                f_out << pieces[c][r]->getPosition().x << endl;
+                f_out << pieces[c][r]->getPosition().y << endl;
+                f_out << pieces[c][r]->getColor() << endl;
+            }
         }
-        for(int i = 0; i < bbp.size(); i++){
-            f_out << bbp[i].getType() << endl;
-            f_out << bbp[i].getPosition().x << endl;
-            f_out << bbp[i].getPosition().y << endl;
-            f_out << bbp[i].getColor() << endl;
-        }
-        for(int i = 0; i < rkp.size(); i++){
-            f_out << rkp[i].getType() << endl;
-            f_out << rkp[i].getPosition().x << endl;
-            f_out << rkp[i].getPosition().y << endl;
-            f_out << rkp[i].getColor() << endl;
-        }
-        for(int i = 0; i < bkp.size(); i++){
-            f_out << bkp[i].getType() << endl;
-            f_out << bkp[i].getPosition().x << endl;
-            f_out << bkp[i].getPosition().y << endl;
-            f_out << bkp[i].getColor() << endl;
-        }
+        f_out.close();
     }
-    f_out.close();
 }
 
 /*
  * Requires: Nothing
  * Modifies: Nothing
- * Effects: Loads the game
+ * Effects: Loads the game. Currently DOES NOT WORK
  */
-void Menu::loadGame(string fileName, vector<BasicPiece> &rbp, vector<BasicPiece> &bbp, vector<KingPiece> &rkp, vector<KingPiece> &bkp){
+void Menu::loadGame(string fileName, vector<unique_ptr<Piece>> pieces){
     ifstream f_in(fileName);
     if (f_in){
         string word = "";
@@ -208,23 +202,14 @@ void Menu::loadGame(string fileName, vector<BasicPiece> &rbp, vector<BasicPiece>
             f_in >> tempY;
             f_in >> tempColor;
             BasicPiece tempBasic = BasicPiece(tempColor, {tempX, tempY});
-            if(tempColor == 0){
-                rbp.push_back(tempBasic);
-            }
-            if(tempColor == 1){
-                bbp.push_back(tempBasic);
-            }
+            pieces.push_back(make_unique<BasicPiece>(tempBasic));
         } if (word == "king"){
             f_in >> tempX;
             f_in >> tempY;
             f_in >> tempColor;
-            KingPiece tempBasic = KingPiece(tempColor, {tempX, tempY});
-            if(tempColor == 0){
-                rkp.push_back(tempBasic);
-            }
-            if(tempColor == 1){
-                bkp.push_back(tempBasic);
-            }
+            KingPiece tempKing = KingPiece(tempColor, {tempX, tempY});
+                pieces.push_back(make_unique<KingPiece>(tempKing));
+
         }
 
     }
@@ -245,6 +230,4 @@ void Menu::exitGame(){
  * Modifies: Nothing
  * Effects: Restarts the game
  */
-void Menu::restartGame(){
-
-}
+void Menu::restartGame(){}

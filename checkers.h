@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <memory>
 #include <vector>
 using namespace std;
 
@@ -56,7 +57,7 @@ public:
     int getColor();
 
 
-    string getType();
+    virtual string getType() const = 0;
 
     /*
      * Requires: point Position
@@ -64,6 +65,8 @@ public:
      * Effects: Moves the piece
      */
     virtual void movePiece(point p) = 0;
+
+    void draw();
 };
 
 class BasicPiece : public Piece{
@@ -90,6 +93,8 @@ public:
      */
     void upgradePiece();
 
+    string getType() const override;
+
 };
 
 class KingPiece : public Piece{
@@ -109,18 +114,38 @@ public:
      */
     void movePiece(point p) override;
 
+    string getType() const override;
+
+};
+
+class EmptyPiece : public Piece{
+public:
+    //Constructor
+    /*
+     * Requires: Int for color and point for position
+     * Modifies: color and position
+     * Effects: Creates a piece with color c at point p
+     */
+    EmptyPiece(point p);
+
+    /*
+     * Requires: point position
+     * Modifies: Position
+     * Effects: Moves the piece to position p
+     */
+    void movePiece(point p) override;
+
+    string getType() const override;
+
 };
 
 class Board{
 private:
     int turn;
     int size;
-    vector<BasicPiece> redBasicPieces;
-    vector<KingPiece> redKingPieces;
-    vector<BasicPiece> blackBasicPieces;
-    vector<KingPiece> blackKingPieces;
-
 public:
+    vector<vector<unique_ptr<Piece>>> pieces;
+
     // Constructors
     /*
      * Requires: Nothing
@@ -129,42 +154,13 @@ public:
      */
     Board();
 
-    //Getters
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Return all pieces
-     */
-    vector<BasicPiece> getRedBasicPieces();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Return all pieces
-     */
-    vector<KingPiece> getRedKingPieces();
-
-    /*
-    * Requires: Nothing
-    * Modifies: Nothing
-    * Effects: Return all pieces
-    */
-    vector<BasicPiece> getBlackBasicPieces();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Return all pieces
-     */
-    vector<KingPiece> getBlackKingPieces();
-
-
     /*
      * Requires: Nothing
      * Modifies: Nothing
      * Effects: Draws the board with all pieces
      */
     void draw();
+
 };
 
 class Menu{
@@ -174,14 +170,14 @@ public:
      * Modifies: Nothing
      * Effects: Saves the game
      */
-    void saveGame(vector<BasicPiece> &rbp, vector<BasicPiece> &bbp, vector<KingPiece> &rkp, vector<KingPiece> &bkp);
+    void saveGame(const vector<vector<unique_ptr<Piece>>> &pieces);
 
     /*
      * Requires: Nothing
      * Modifies: Nothing
      * Effects: Loads the game
      */
-    void loadGame(string fileName, vector<BasicPiece> &rbp, vector<BasicPiece> &bbp, vector<KingPiece> &rkp, vector<KingPiece> &bkp);
+    void loadGame(string fileName, vector<unique_ptr<Piece>> pieces);
 
     /*
      * Requires: Nothing
@@ -198,5 +194,4 @@ public:
     void restartGame();
 
 };
-
 #endif //JEB2020_CHECKERS_H

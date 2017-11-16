@@ -4,38 +4,44 @@
 int main() {
     cout << "Hello, World!" << endl;
 
-    BasicPiece rbp = BasicPiece(0, {0, 0});
-    BasicPiece bbp = BasicPiece(1, {50, 0});
-    KingPiece rkp = KingPiece(0, {0, 50});
-    KingPiece bkp = KingPiece(1, {50, 50});
+    Board board1;
 
-    cout << rbp.getColor() << rbp.getPosition().x << rbp.getPosition().y << endl;
-    cout << bbp.getColor() << bbp.getPosition().x << bbp.getPosition().y << endl;
-    cout << rkp.getColor() << rkp.getPosition().x << rkp.getPosition().y << endl;
-    cout << bkp.getColor() << bkp.getPosition().x << bkp.getPosition().y << endl;
+    //Add all the starting checkers pieces to the board;
+    board1.pieces[1][0] = make_unique<BasicPiece>(BasicPiece(0, {1, 0}));
+    board1.pieces[3][0] = make_unique<BasicPiece>(BasicPiece(0, {3, 0}));
+    board1.pieces[5][0] = make_unique<BasicPiece>(BasicPiece(0, {5, 0}));
+    board1.pieces[7][0] = make_unique<BasicPiece>(BasicPiece(0, {7, 0}));
+    board1.pieces[0][1] = make_unique<BasicPiece>(BasicPiece(0, {0, 1}));
+    board1.pieces[2][1] = make_unique<BasicPiece>(BasicPiece(0, {2, 1}));
+    board1.pieces[4][1] = make_unique<BasicPiece>(BasicPiece(0, {4, 1}));
+    board1.pieces[6][1] = make_unique<BasicPiece>(BasicPiece(0, {6, 1}));
+    board1.pieces[1][2] = make_unique<BasicPiece>(BasicPiece(0, {1, 2}));
+    board1.pieces[3][2] = make_unique<BasicPiece>(BasicPiece(0, {3, 2}));
+    board1.pieces[5][2] = make_unique<BasicPiece>(BasicPiece(0, {5, 2}));
+    board1.pieces[7][2] = make_unique<BasicPiece>(BasicPiece(0, {7, 2}));
+    board1.pieces[0][5] = make_unique<BasicPiece>(BasicPiece(1, {0, 5}));
+    board1.pieces[2][5] = make_unique<BasicPiece>(BasicPiece(1, {2, 5}));
+    board1.pieces[4][5] = make_unique<BasicPiece>(BasicPiece(1, {4, 5}));
+    board1.pieces[6][5] = make_unique<BasicPiece>(BasicPiece(1, {6, 5}));
+    board1.pieces[1][6] = make_unique<BasicPiece>(BasicPiece(1, {1, 6}));
+    board1.pieces[3][6] = make_unique<BasicPiece>(BasicPiece(1, {3, 6}));
+    board1.pieces[5][6] = make_unique<BasicPiece>(BasicPiece(1, {5, 6}));
+    board1.pieces[7][6] = make_unique<BasicPiece>(BasicPiece(1, {7, 6}));
+    board1.pieces[0][7] = make_unique<BasicPiece>(BasicPiece(1, {0, 7}));
+    board1.pieces[2][7] = make_unique<BasicPiece>(BasicPiece(1, {2, 7}));
+    board1.pieces[4][7] = make_unique<BasicPiece>(BasicPiece(1, {4, 7}));
+    board1.pieces[6][7] = make_unique<BasicPiece>(BasicPiece(1, {6, 7}));
 
-    vector<BasicPiece> redBasicPieces;
-    vector<KingPiece> redKingPieces;
-    vector<BasicPiece> blackBasicPieces;
-    vector<KingPiece> blackKingPieces;
 
-    redBasicPieces.push_back(rbp);
-    redKingPieces.push_back(rkp);
-    blackBasicPieces.push_back(bbp);
-    blackKingPieces.push_back(bkp);
+    board1.pieces[2][5]->draw();
+    board1.pieces[4][6]->draw();
 
     Menu menu1 = Menu();
 
-    menu1.saveGame(redBasicPieces, blackBasicPieces, redKingPieces, blackKingPieces);
-    cout << redBasicPieces.size() << endl;
-    redBasicPieces.erase(redBasicPieces.begin());
-    cout << redBasicPieces.size() << endl;
-    menu1.loadGame("checkersSaveData.txt",redBasicPieces, blackBasicPieces, redKingPieces, blackKingPieces);
-    cout << redBasicPieces.size() << endl;
-    cout << redBasicPieces[0].getType() << " "<< redBasicPieces[0].getColor() << redBasicPieces[0].getPosition().x << redBasicPieces[0].getPosition().y << endl;
-    cout << redKingPieces[0].getType() << " "<< redKingPieces[0].getColor() << redKingPieces[0].getPosition().x << redKingPieces[0].getPosition().y << endl;
+    Board board2;
 
-
+    menu1.saveGame(board1.pieces);
+    //menu1.loadGame("checkersSaveData.txt", board2.pieces);
 
 
     return 0;

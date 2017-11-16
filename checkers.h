@@ -5,6 +5,8 @@
 #ifndef JEB2020_CHECKERS_H
 #define JEB2020_CHECKERS_H
 
+#include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -14,46 +16,14 @@ struct point{
     int y;
 };
 
-class Menu{
-public:
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Saves the game
-     */
-    void saveGame();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Loads the game
-     */
-    void loadGame();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Exits the game
-     */
-    void exitGame();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Restarts the game
-     */
-    void restartGame();
-
-};
-
 class Piece{
-private:
-
+protected:
+    int color;
+    bool taken;
+    point position;
+    string type;
 
 public:
-    int color;
-    int taken;
-    point position;
 
     //Constructor
     /*
@@ -69,7 +39,7 @@ public:
      * Modifies: Nothing
      * Effects: Gets the position of the piece
      */
-    virtual point getPosition();
+    point getPosition();
 
     /*
      * Requires: Nothing
@@ -85,51 +55,15 @@ public:
      */
     int getColor();
 
+
+    string getType();
+
     /*
      * Requires: point Position
      * Modifies: Position of the piece
      * Effects: Moves the piece
      */
     virtual void movePiece(point p) = 0;
-};
-
-class Board{
-private:
-    int turn;
-    int size;
-    vector<Piece> redPieces;
-    vector<Piece> blackPieces;
-
-public:
-    // Constructors
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Creates a Board object
-     */
-    Board();
-
-    //Getters
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Return all pieces
-     */
-    vector<Piece> getRedPieces();
-
-    /*
-    * Requires: Nothing
-    * Modifies: Nothing
-    * Effects: Return all pieces
-    */
-    vector<Piece> getBlackPieces();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Draws the board with all pieces
-     */
-    void draw();
 };
 
 class BasicPiece : public Piece{
@@ -174,6 +108,94 @@ public:
      * Effects: Moves the piece to position p
      */
     void movePiece(point p) override;
+
+};
+
+class Board{
+private:
+    int turn;
+    int size;
+    vector<BasicPiece> redBasicPieces;
+    vector<KingPiece> redKingPieces;
+    vector<BasicPiece> blackBasicPieces;
+    vector<KingPiece> blackKingPieces;
+
+public:
+    // Constructors
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Creates a Board object
+     */
+    Board();
+
+    //Getters
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Return all pieces
+     */
+    vector<BasicPiece> getRedBasicPieces();
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Return all pieces
+     */
+    vector<KingPiece> getRedKingPieces();
+
+    /*
+    * Requires: Nothing
+    * Modifies: Nothing
+    * Effects: Return all pieces
+    */
+    vector<BasicPiece> getBlackBasicPieces();
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Return all pieces
+     */
+    vector<KingPiece> getBlackKingPieces();
+
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Draws the board with all pieces
+     */
+    void draw();
+};
+
+class Menu{
+public:
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Saves the game
+     */
+    void saveGame(vector<BasicPiece> &rbp, vector<BasicPiece> &bbp, vector<KingPiece> &rkp, vector<KingPiece> &bkp);
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Loads the game
+     */
+    void loadGame(string fileName, vector<BasicPiece> &rbp, vector<BasicPiece> &bbp, vector<KingPiece> &rkp, vector<KingPiece> &bkp);
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Exits the game
+     */
+    void exitGame();
+
+    /*
+     * Requires: Nothing
+     * Modifies: Nothing
+     * Effects: Restarts the game
+     */
+    void restartGame();
 
 };
 

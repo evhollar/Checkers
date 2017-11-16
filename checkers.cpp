@@ -4,42 +4,6 @@
 
 #include "checkers.h"
 
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Saves the game
- */
-void Menu::saveGame(){
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Loads the game
- */
-void Menu::loadGame(){
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Exits the game
- */
-void Menu::exitGame(){
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Restarts the game
- */
-void Menu::restartGame(){
-
-}
-
 //Constructor
 /*
  * Requires: Nothing
@@ -79,53 +43,10 @@ int Piece::getColor(){
     return color;
 }
 
-/*
- * Requires: point Position
- * Modifies: Position of the piece
- * Effects: Moves the piece
- */
-void Piece::movePiece(point p){
-    position = p;
+void Piece::draw(){
+    cout << getType() << " piece is located at ("
+         << getPosition().x << "," << getPosition().y << ")" << endl;
 }
-
-// Constructors
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Creates a Board object
- */
-Board::Board(){
-
-}
-
-//Getters
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Return all red pieces
- */
-vector<Piece> Board::getRedPieces(){
-    return redPieces;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Return all black pieces
- */
-vector<Piece> Board::getBlackPieces(){
-    return blackPieces;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Draws the board with all pieces
- */
-void Board::draw(){
-
-}
-
 
 //Constructor
 /*
@@ -136,34 +57,7 @@ void Board::draw(){
 BasicPiece::BasicPiece(int c, point p){
     color = c;
     position = p;
-}
-
-//Getters
-/*
-* Requires: Nothing
-* Modifies: Nothing
-* Effects: Returns int specifying color
-*/
-int BasicPiece::getColor(){
-    return color;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Returns the position of the piece
- */
-point BasicPiece::getPosition(){
-    return position;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Captures the piece
- */
-void BasicPiece::capture(){
-
+    type = "basic";
 }
 
 /*
@@ -171,7 +65,7 @@ void BasicPiece::capture(){
  * Modifies: Position
  * Effects: Moves the piece to position p
  */
-void BasicPiece::movePiece(point p){
+void BasicPiece::movePiece(point p) {
     position = p;
 }
 
@@ -184,6 +78,15 @@ void BasicPiece::upgradePiece(){
 
 }
 
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Returns the type of the piece
+ */
+string BasicPiece::getType() const {
+    return "basic";
+}
+
 //Constructor
 /*
 * Requires: Int for color and point for position
@@ -193,34 +96,7 @@ void BasicPiece::upgradePiece(){
 KingPiece::KingPiece(int c, point p){
     color = c;
     position = p;
-}
-
-//Getters
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Returns int specifying color
- */
-int KingPiece::getColor(){
-    return color;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Returns the position of the piece
- */
-point KingPiece::getPosition(){
-    return position;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Captures the piece
- */
-void KingPiece::capture(){
-
+    type = "king";
 }
 
 /*
@@ -228,6 +104,99 @@ void KingPiece::capture(){
  * Modifies: Position
  * Effects: Moves the piece to position p
  */
-void KingPiece::movePiece(point p){
+void KingPiece::movePiece(point p) {
     position = p;
 }
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Returns the type of the piece
+ */
+string KingPiece::getType() const {
+    return "king";
+}
+
+// Constructors
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Creates a Board object
+ */
+Board::Board(){
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Draws the board with all pieces
+ */
+void Board::draw(){
+
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Saves the game by storing the positions, types, and colors of all pieces on the board.
+ */
+void Menu::saveGame(const vector<unique_ptr<Piece>> &pieces) {
+    ofstream f_out("checkersSaveData.txt", ios::app);
+    if (f_out) {
+        for (int i = 0; i < pieces.size(); i++) {
+            f_out << pieces[i]->getType() << endl;
+            f_out << pieces[i]->getPosition().x << endl;
+            f_out << pieces[i]->getPosition().y << endl;
+            f_out << pieces[i]->getColor() << endl;
+        }
+        f_out.close();
+    }
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Loads the game. Currently DOES NOT WORK
+ */
+void Menu::loadGame(string fileName, vector<unique_ptr<Piece>> pieces){
+    ifstream f_in(fileName);
+    if (f_in){
+        string word = "";
+        int tempX;
+        int tempY;
+        int tempColor;
+        f_in >> word;
+        if(word == "basic"){
+            f_in >> tempX;
+            f_in >> tempY;
+            f_in >> tempColor;
+            BasicPiece tempBasic = BasicPiece(tempColor, {tempX, tempY});
+            pieces.push_back(make_unique<BasicPiece>(tempBasic));
+        } if (word == "king"){
+            f_in >> tempX;
+            f_in >> tempY;
+            f_in >> tempColor;
+            KingPiece tempKing = KingPiece(tempColor, {tempX, tempY});
+                pieces.push_back(make_unique<KingPiece>(tempKing));
+
+        }
+
+    }
+
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Exits the game
+ */
+void Menu::exitGame(){
+
+}
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Restarts the game
+ */
+void Menu::restartGame(){}

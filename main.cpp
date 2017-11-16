@@ -40,6 +40,16 @@ int main() {
 
     Board board2;
 
+    board2.pieces[5][5] = make_unique<KingPiece>(KingPiece(1, {5, 5}));
+
+    board2.pieces[5][5]->draw();
+    board2.pieces[4][5]->draw();
+
+    board2.capturePiece(5,5);
+    board2.pieces[5][5]->draw();
+
+
+
     menu1.saveGame(board1.pieces);
     //menu1.loadGame("checkersSaveData.txt", board2.pieces);
 

@@ -168,10 +168,15 @@ void Board::capturePiece(int x, int y) {
     pieces[x][y] = make_unique<EmptyPiece>(EmptyPiece({x, y}));
 }
 
-/*void Board::movePiece(int x1, int y1, int x2, int y2) {
-    pieces[x2][y2] =
-    pieces[x1][y1] = make_unique<EmptyPiece>(EmptyPiece({x1, y1}));
-}*/
+void Board::movePiece(int x1, int y1, int x2, int y2) {
+    if (pieces[x1][y1]->getType() == "basic"){
+        pieces[x2][y2] = make_unique<BasicPiece>(BasicPiece(pieces[x1][y1]->getColor(), {x2, y2}));
+    }
+    if (pieces[x1][y1]->getType() == "king"){
+        pieces[x2][y2] = make_unique<KingPiece>(KingPiece(pieces[x1][y1]->getColor(), {x2, y2}));
+    }
+    pieces[x1][y1] =  make_unique<EmptyPiece>(EmptyPiece({x1, y1}));
+}
 
 /*
  * Requires: Nothing
@@ -198,7 +203,7 @@ void Menu::saveGame(const vector<vector<unique_ptr<Piece>>> &pieces) {
  * Modifies: Nothing
  * Effects: Loads the game. Currently DOES NOT WORK
  */
-void Menu::loadGame(string fileName, vector<vector<unique_ptr<Piece>>> pieces){
+void Menu::loadGame(string fileName, vector<vector<unique_ptr<Piece>>> &pieces){
     ifstream f_in(fileName);
     if (f_in){
         string word = "";

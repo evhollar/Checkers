@@ -36,6 +36,11 @@ int main() {
     board1.pieces[2][5]->draw();
     board1.pieces[4][6]->draw();
 
+    board1.movePiece(2,5,4,6);
+
+    board1.pieces[2][5]->draw();
+    board1.pieces[4][6]->draw();
+
     Menu menu1 = Menu();
 
     Board board2;
@@ -51,8 +56,9 @@ int main() {
 
 
     menu1.saveGame(board1.pieces);
-    //menu1.loadGame("checkersSaveData.txt", board2.pieces);
+    menu1.loadGame("checkersSaveData.txt", board2.pieces);
 
+    board2.pieces[0][0]->draw();
 
     return 0;
 }

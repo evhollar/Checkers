@@ -159,7 +159,7 @@ void Board::draw(){
  * Modifies: Nothing
  * Effects: Saves the game
  */
-void Menu::saveGame(vector<BasicPiece> rbp, vector<BasicPiece> bbp, vector<KingPiece> rkp, vector<KingPiece> bkp){
+void Menu::saveGame(vector<BasicPiece> &rbp, vector<BasicPiece> &bbp, vector<KingPiece> &rkp, vector<KingPiece> &bkp){
     ofstream f_out("checkersSaveData.txt", ios::app);
     if (f_out){
         for(int i = 0; i < rbp.size(); i++){
@@ -195,7 +195,7 @@ void Menu::saveGame(vector<BasicPiece> rbp, vector<BasicPiece> bbp, vector<KingP
  * Modifies: Nothing
  * Effects: Loads the game
  */
-void Menu::loadGame(string fileName){
+void Menu::loadGame(string fileName, vector<BasicPiece> &rbp, vector<BasicPiece> &bbp, vector<KingPiece> &rkp, vector<KingPiece> &bkp){
     ifstream f_in(fileName);
     if (f_in){
         string word = "";
@@ -209,7 +209,21 @@ void Menu::loadGame(string fileName){
             f_in >> tempColor;
             BasicPiece tempBasic = BasicPiece(tempColor, {tempX, tempY});
             if(tempColor == 0){
-
+                rbp.push_back(tempBasic);
+            }
+            if(tempColor == 1){
+                bbp.push_back(tempBasic);
+            }
+        } if (word == "king"){
+            f_in >> tempX;
+            f_in >> tempY;
+            f_in >> tempColor;
+            KingPiece tempBasic = KingPiece(tempColor, {tempX, tempY});
+            if(tempColor == 0){
+                rkp.push_back(tempBasic);
+            }
+            if(tempColor == 1){
+                bkp.push_back(tempBasic);
             }
         }
 

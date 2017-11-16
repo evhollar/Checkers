@@ -27,6 +27,16 @@ int main() {
     Menu menu1 = Menu();
 
     menu1.saveGame(redBasicPieces, blackBasicPieces, redKingPieces, blackKingPieces);
+    cout << redBasicPieces.size() << endl;
+    redBasicPieces.erase(redBasicPieces.begin());
+    cout << redBasicPieces.size() << endl;
+    menu1.loadGame("checkersSaveData.txt",redBasicPieces, blackBasicPieces, redKingPieces, blackKingPieces);
+    cout << redBasicPieces.size() << endl;
+    cout << redBasicPieces[0].getType() << " "<< redBasicPieces[0].getColor() << redBasicPieces[0].getPosition().x << redBasicPieces[0].getPosition().y << endl;
+    cout << redKingPieces[0].getType() << " "<< redKingPieces[0].getColor() << redKingPieces[0].getPosition().x << redKingPieces[0].getPosition().y << endl;
+
+
+
 
     return 0;
 }

@@ -45,18 +45,16 @@ public:
     /*
      * Requires: Nothing
      * Modifies: Nothing
-     * Effects: Captures the piece
-     */
-    void capture();
-
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
      * Effects: Returns an int specifying color of the piece
      */
     int getColor();
 
 
+    /*
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: returns the type of the piece
+     */
     virtual string getType() const = 0;
 
     /*
@@ -66,6 +64,11 @@ public:
      */
     virtual void movePiece(point p) = 0;
 
+    /*
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: draws the Piece object
+     */
     void draw();
 };
 
@@ -87,12 +90,10 @@ public:
     void movePiece(point p) override;
 
     /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Makes the BasicPiece a KingPiece
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: returns the type of the piece
      */
-    void upgradePiece();
-
     string getType() const override;
 
 };
@@ -114,6 +115,11 @@ public:
      */
     void movePiece(point p) override;
 
+    /*
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: returns the type of the piece
+     */
     string getType() const override;
 
 };
@@ -135,6 +141,11 @@ public:
      */
     void movePiece(point p) override;
 
+    /*
+     * Requires: nothing
+     * Modifies: nothing
+     * Effects: returns the type of the piece
+     */
     string getType() const override;
 
 };
@@ -161,8 +172,25 @@ public:
      */
     void draw();
 
+    /*
+    * Requires: int x and int y
+    * Modifies: pieces vector
+    * Effects: Removes piece at x, y and replaces it with an empty piece
+    */
     void capturePiece(int x, int y);
 
+    /*
+    * Requires: Nothing
+     * Modifies: Nothing
+    * Effects: Makes the BasicPiece a KingPiece
+    */
+    void upgradePiece(int x, int y);
+
+    /*
+    * Requires: int x1, int x2, int y1, int y2
+     * Modifies: pieces vector
+     * Effects: Moves the piece at location x1, y1 to location x2, y2
+     */
     void movePiece(int x1, int y1, int x2, int y2);
 
 };

@@ -28,21 +28,17 @@ point Piece::getPosition(){
 /*
  * Requires: Nothing
  * Modifies: Nothing
- * Effects: Captures the piece
- */
-void Piece::capture(){
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
  * Effects: Returns an int specifying color of the piece
  */
 int Piece::getColor(){
     return color;
 }
 
+/*
+ * Requires: nothing
+ * Modifies: nothing
+ * Effects: draws the piece
+ */
 void Piece::draw(){
     cout << getType() << " piece is located at ("
          << getPosition().x << "," << getPosition().y << ")" << endl;
@@ -67,15 +63,6 @@ BasicPiece::BasicPiece(int c, point p){
  */
 void BasicPiece::movePiece(point p) {
     position = p;
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Makes the BasicPiece a KingPiece
- */
-void BasicPiece::upgradePiece(){
-
 }
 
 /*
@@ -117,15 +104,30 @@ string KingPiece::getType() const {
     return "king";
 }
 
+/*
+ * Requires: point position
+ * Modifies: nothing
+ * Effects: creates an EmptyPiece object at position p
+ */
 EmptyPiece::EmptyPiece(point p) : Piece() {
     position = p;
     type = "empty";
 }
 
+/*
+ * Requires: nothing
+ * Modifies: nothing
+ * Effects: returns type of EmptyPiece
+ */
 string EmptyPiece::getType() const {
     return "empty";
 }
 
+/*
+ * Requires: point p
+ * Modifies: position
+ * Effects: Moves EmptyPiece object to point p
+ */
 void EmptyPiece::movePiece(point p) {
     position = p;
 }
@@ -164,9 +166,29 @@ void Board::draw(){
 
 }
 
+/*
+ * Requires: int x and int y
+ * Modifies: pieces vector
+ * Effects: Removes piece at x, y and replaces it with an empty piece
+ */
 void Board::capturePiece(int x, int y) {
     pieces[x][y] = make_unique<EmptyPiece>(EmptyPiece({x, y}));
 }
+
+/*
+ * Requires: Nothing
+ * Modifies: Nothing
+ * Effects: Makes the BasicPiece a KingPiece
+ */
+void Board::upgradePiece(int x, int y){
+    pieces[x][y] = make_unique<KingPiece>(KingPiece(pieces[x][y]->getColor(), {x, y}));
+}
+
+/*
+ * Requires: int x1, int x2, int y1, int y2
+ * Modifies: pieces vector
+ * Effects: Moves the piece at location x1, y1 to location x2, y2
+ */
 
 void Board::movePiece(int x1, int y1, int x2, int y2) {
     if (pieces[x1][y1]->getType() == "basic"){

@@ -20,7 +20,6 @@ struct point{
 class Piece{
 protected:
     int color;
-    bool taken;
     point position;
     string type;
 
@@ -58,13 +57,6 @@ public:
     virtual string getType() const = 0;
 
     /*
-     * Requires: point Position
-     * Modifies: Position of the piece
-     * Effects: Moves the piece
-     */
-    virtual void movePiece(point p) = 0;
-
-    /*
      * Requires: nothing
      * Modifies: nothing
      * Effects: draws the Piece object
@@ -81,13 +73,6 @@ public:
      * Effects: Creates a piece with color c at point p
      */
     BasicPiece(int c, point p);
-
-    /*
-     * Requires: point position
-     * Modifies: Position
-     * Effects: Moves the piece to position p
-     */
-    void movePiece(point p) override;
 
     /*
      * Requires: nothing
@@ -109,13 +94,6 @@ public:
     KingPiece(int c, point p);
 
     /*
-     * Requires: point position
-     * Modifies: Position
-     * Effects: Moves the piece to position p
-     */
-    void movePiece(point p) override;
-
-    /*
      * Requires: nothing
      * Modifies: nothing
      * Effects: returns the type of the piece
@@ -133,13 +111,6 @@ public:
      * Effects: Creates a piece with color c at point p
      */
     EmptyPiece(point p);
-
-    /*
-     * Requires: point position
-     * Modifies: Position
-     * Effects: Moves the piece to position p
-     */
-    void movePiece(point p) override;
 
     /*
      * Requires: nothing

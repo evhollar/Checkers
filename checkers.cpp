@@ -57,21 +57,12 @@ BasicPiece::BasicPiece(int c, point p){
 }
 
 /*
- * Requires: point position
- * Modifies: Position
- * Effects: Moves the piece to position p
- */
-void BasicPiece::movePiece(point p) {
-    position = p;
-}
-
-/*
  * Requires: Nothing
  * Modifies: Nothing
  * Effects: Returns the type of the piece
  */
 string BasicPiece::getType() const {
-    return "basic";
+    return type;
 }
 
 //Constructor
@@ -87,21 +78,12 @@ KingPiece::KingPiece(int c, point p){
 }
 
 /*
- * Requires: point position
- * Modifies: Position
- * Effects: Moves the piece to position p
- */
-void KingPiece::movePiece(point p) {
-    position = p;
-}
-
-/*
  * Requires: Nothing
  * Modifies: Nothing
  * Effects: Returns the type of the piece
  */
 string KingPiece::getType() const {
-    return "king";
+    return type;
 }
 
 /*
@@ -123,15 +105,6 @@ string EmptyPiece::getType() const {
     return "empty";
 }
 
-/*
- * Requires: point p
- * Modifies: position
- * Effects: Moves EmptyPiece object to point p
- */
-void EmptyPiece::movePiece(point p) {
-    position = p;
-}
-
 // Constructors
 /*
  * Requires: Nothing
@@ -140,6 +113,7 @@ void EmptyPiece::movePiece(point p) {
  */
 Board::Board(){
 
+    //Sets pieces to a board of empty pieces
     //Cycle through all the columns
     for ( int c = 0; c < 8 ; ++c)
     {
@@ -191,12 +165,15 @@ void Board::upgradePiece(int x, int y){
  */
 
 void Board::movePiece(int x1, int y1, int x2, int y2) {
+    //Checks for the type of the piece being moved and sets the target spot to a piece of that type
+    //and color
     if (pieces[x1][y1]->getType() == "basic"){
         pieces[x2][y2] = make_unique<BasicPiece>(BasicPiece(pieces[x1][y1]->getColor(), {x2, y2}));
     }
     if (pieces[x1][y1]->getType() == "king"){
         pieces[x2][y2] = make_unique<KingPiece>(KingPiece(pieces[x1][y1]->getColor(), {x2, y2}));
     }
+    //Sets the original spot on the board to an emptyPiece
     pieces[x1][y1] =  make_unique<EmptyPiece>(EmptyPiece({x1, y1}));
 }
 
@@ -223,7 +200,7 @@ void Menu::saveGame(const vector<vector<unique_ptr<Piece>>> &pieces) {
 /*
  * Requires: Nothing
  * Modifies: Nothing
- * Effects: Loads the game. Currently DOES NOT WORK
+ * Effects: Loads the last saved game.
  */
 void Menu::loadGame(string fileName, vector<vector<unique_ptr<Piece>>> &pieces){
     ifstream f_in(fileName);

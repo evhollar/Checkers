@@ -56,6 +56,7 @@ int main() {
 
     board2.capturePiece(1,0);
     board2.pieces[1][0]->draw();
+    board2.pieces[3][6]->draw();
 
     return 0;
 }

@@ -205,7 +205,7 @@ void Menu::saveGame(const vector<vector<unique_ptr<Piece>>> &pieces) {
  */
 void Menu::loadGame(string fileName, vector<vector<unique_ptr<Piece>>> &pieces){
     ifstream f_in(fileName);
-    if (f_in){
+    while (f_in){
         string word = "";
         int tempX;
         int tempY;

@@ -10,9 +10,10 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+
 using namespace std;
 
-struct point{
+struct point {
     int x;
     int y;
 };
@@ -123,8 +124,10 @@ public:
 
 class Board{
 private:
-    int turn;
-    int size;
+    int turn = 1;
+    int size = 8;
+    int bonusMove;
+    point activePiece;
 public:
     vector<vector<unique_ptr<Piece>>> pieces;
 
@@ -163,6 +166,14 @@ public:
      * Effects: Moves the piece at location x1, y1 to location x2, y2
      */
     void movePiece(int x1, int y1, int x2, int y2);
+
+    int getSize();
+
+    void setActivePiece(int x, int y);
+
+    point getActivePiece();
+
+    int getBonusMove();
 
 };
 

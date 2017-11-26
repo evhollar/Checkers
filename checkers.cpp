@@ -227,10 +227,22 @@ void Board::movePiece(int x1, int y1, int x2, int y2) {
             }
         }
     }
+    //BLUE UPGRADE
+    if (y2 == size - 1 && pieces[x2][y2]->getType() == "basic" && pieces[x2][y2]->getColor() == 0) {
+        upgradePiece(x2, y2);
+        //If the piece was upgraded on a capture move and there is another capture move available
+        if (y1 == size - 3 && x2 > 2 && x2 < size - 2 &&
+            ((pieces[x2 - 2][y2 - 2]->getType() == "empty" && pieces[x2 - 1][y2 - 1]->getColor() == 1)
+             || (pieces[x2 + 2][y2 - 2]->getType() == "empty" && pieces[x2 + 1][y2 - 1]->getColor() == 1))) {
+            bonusMove = 1;
+            activePiece = {x2, y2};
+            turn = 0;
+        }
+    }
     //RED BASIC
     //If the active piece is a red piece
     if (pieces[x1][y1]->getColor() == 1 && pieces[x1][y1]->getType() == "basic" && turn == 1) {
-        //and the clicked spot is a spot where the blue piece can move
+        //and the clicked spot is a spot where the red piece can move
         //Can't make a basic move if it is your turn for a bonus move
         if ((x2 == x1 + 1 || x2 == x1 - 1) && y2 == y1 - 1 && bonusMove == 0) {
             //Move the red active piece there and set it to blue's turn
@@ -238,7 +250,7 @@ void Board::movePiece(int x1, int y1, int x2, int y2) {
             capturePiece(x1, y1);
             turn = 0;
         }
-        //RED PIECE CAPTURE
+        //RED BASIC CAPTURE
         //If the clicked spot is over a blue piece
         if ((x2 == x1 + 2 || x2 == x1 - 2) && y2 == y1 - 2
             && pieces[(x1 + x2) / 2][(y1 + y2) / 2]->getColor() == 0) {
@@ -283,12 +295,116 @@ void Board::movePiece(int x1, int y1, int x2, int y2) {
             }
         }
     }
-
-
+    //RED UPGRADE
+    if (y2 == 0 && pieces[x2][y2]->getType() == "basic" && pieces[x2][y2]->getColor() == 1) {
+        upgradePiece(x2, y2);
+        //If the piece was upgrades on a capture move and there is another capture move available
+        //for the new king
+        if (y1 == 2 && x2 > 2 && x2 < size - 2 &&
+            ((pieces[x2 - 2][y2 + 2]->getType() == "empty" && pieces[x2 - 1][y2 + 1]->getColor() == 0)
+             || (pieces[x2 + 2][y2 + 2]->getType() == "empty" && pieces[x2 + 1][y2 + 1]->getColor() == 0))) {
+            //Set it to the active piece and the turn to red's turn
+            bonusMove = 1;
+            activePiece = {x2, y2};
+            turn = 1;
+        }
+    }
+    //KING
+    if (pieces[x1][y1]->getColor() == turn && pieces[x1][y1]->getType() == "king") {
+        //and the clicked spot is a spot where the red piece can move
+        //Can't make a basic move if it is your turn for a bonus move
+        if ((x2 == x1 + 1 || x2 == x1 - 1) && (y2 == y1 - 1 || y2 == y1 + 1)  && bonusMove == 0) {
+            //Move the red active piece there and set it to blue's turn
+            pieces[x2][y2] = make_unique<KingPiece>(KingPiece(pieces[x1][y1]->getColor(), {x2, y2}));
+            capturePiece(x1, y1);
+            passTurn();
+        }
+        //KING CAPTURE
+        //If the clicked spot is over an enemy piece
+        if ((x2 == x1 + 2 || x2 == x1 - 2) && (y2 == y1 - 2 || y2 == y1 + 2)
+            && pieces[(x1 + x2) / 2][(y1 + y2) / 2]->getColor() != pieces[x1][y1]->getColor()
+            && pieces[(x1 + x2) / 2][(y1 + y2) / 2]->getType() != "empty") {
+            //Move the red piece there and capture the blue piece
+            pieces[x2][y2] = make_unique<KingPiece>(KingPiece(pieces[x1][y1]->getColor(), {x2, y2}));
+            capturePiece(x1, y1);
+            capturePiece((x1 + x2) / 2, (y1 + y2) / 2);
+            //Set it to blue's turn and note no bonus move available.
+            passTurn();
+            bonusMove = 0;
+            //If the piece is moved to a central spot on the board
+            if (x2 > 1 && x2 < size - 2 && y2 > 1 && y2 < size - 2) {
+                //CENTER BOARD BONUS CHECK
+                //Check all possible spots for a bonus capture. Make sure that nearby piece is a piece of the opposite color and the far piece is empty
+                if ((pieces[x2 - 2][y2 - 2]->getType() == "empty" && pieces[x2 - 1][y2 - 1]->getType() != "empty" && pieces[x2 - 1][y2 - 1]->getColor() != pieces[x2][y2]->getColor())
+                    || (pieces[x2 + 2][y2 - 2]->getType() == "empty" && pieces[x2 + 1][y2 - 1]->getType() != "empty" && pieces[x2 + 1][y2 - 1]->getColor() != pieces[x2][y2]->getColor())
+                    || (pieces[x2 - 2][y2 + 2]->getType() == "empty" && pieces[x2 - 1][y2 + 1]->getType() != "empty" && pieces[x2 - 1][y2 + 1]->getColor() != pieces[x2][y2]->getColor())
+                    || (pieces[x2 + 2][y2 + 2]->getType() == "empty" && pieces[x2 + 1][y2 + 1]->getType() != "empty" && pieces[x2 + 1][y2 + 1]->getColor() != pieces[x2][y2]->getColor())) {
+                    //If there is a bonus capture available set the active piece to the current piece and the
+                    //turn back to the original turn. Can only move that piece.
+                    bonusMove = 1;
+                    activePiece = {x2, y2};
+                    passTurn();
+                }
+            }
+            //LEFT CENTER BONUS CHECK
+            //Only check spot that are on the board. Checking spots outside the range of the board will cause a crash
+            if (x2 < 2 && y2 > 1 && y2 < size - 2) {
+                if ((pieces[x2 + 2][y2 - 2]->getType() == "empty" && pieces[x2 + 1][y2 - 1]->getType() != "empty" && pieces[x2 + 1][y2 - 1]->getColor() != pieces[x2][y2]->getColor())
+                    || (pieces[x2 + 2][y2 + 2]->getType() == "empty" && pieces[x2 + 1][y2 + 1]->getType() != "empty" && pieces[x2 + 1][y2 + 1]->getColor() != pieces[x2][y2]->getColor())) {
+                    //If there is a bonus capture available set the active piece to the current piece and the
+                    //turn back to blue's turn
+                    bonusMove = 1;
+                    activePiece = {x2, y2};
+                    passTurn();
+                }
+            }
+            //RIGHT CENTER BONUS CHECK
+            if (x2 > size - 3 && y2 > 1 && y2 < size - 2) {
+                if ((pieces[x2 - 2][y2 - 2]->getType() == "empty" && pieces[x2 - 1][y2 - 1]->getType() != "empty" && pieces[x2 - 1][y2 - 1]->getColor() == 0)
+                    || (pieces[x2 - 2][y2 + 2]->getType() == "empty" && pieces[x2 - 1][y2 + 1]->getType() != "empty" && pieces[x2 - 1][y2 + 1]->getColor() == 0)) {
+                    //If there is a bonus capture available set the active piece to the current piece and the
+                    //turn back to the original turn.
+                    bonusMove = 1;
+                    activePiece = {x2, y2};
+                    passTurn();
+                }
+            }
+            //TOP CENTER BONUS CHECK
+            if (x2 > 2 && x2 < size - 2 && y2 < 2) {
+                if ((pieces[x2 - 2][y2 + 2]->getType() == "empty" && pieces[x2 - 1][y2 + 1]->getType() != "empty" && pieces[x2 - 1][y2 - 1]->getColor() != pieces[x2][y2]->getColor())
+                    || (pieces[x2 + 2][y2 + 2]->getType() == "empty" && pieces[x2 + 1][y2 + 1]->getType() != "empty" && pieces[x2 - 1][y2 + 1]->getColor() != pieces[x2][y2]->getColor())) {
+                    //If there is a bonus capture available set the active piece to the current piece and the
+                    //turn back to blue's turn.
+                    bonusMove = 1;
+                    activePiece = {x2, y2};
+                    passTurn();
+                }
+            }
+            //BOTTOM CENTER BONUS CHECK
+            if (x2 > 2 && x2 < size - 2 && y2 > size - 3) {
+                if ((pieces[x2 - 2][y2 - 2]->getType() == "empty" && pieces[x2 - 1][y2 - 1]->getType() != "empty" && pieces[x2 - 1][y2 - 1]->getColor() != pieces[x2][y2]->getColor())
+                    || (pieces[x2 + 2][y2 - 2]->getType() == "empty" && pieces[x2 + 1][y2 - 1]->getType() != "empty" && pieces[x2 - 1][y2 + 1]->getColor() != pieces[x2][y2]->getColor())) {
+                    //If there is a bonus capture available set the active piece to the current piece and the
+                    //turn back to blue's turn.
+                    bonusMove = 1;
+                    activePiece = {x2, y2};
+                    passTurn();
+                }
+            }
+        }
+    }
 }
 
 int Board::getSize() {
     return size;
+}
+
+void Board::passTurn() {
+    if (turn == 0){
+        turn = 1;
+    } else {
+        turn = 0;
+    }
 }
 
 void Board::setActivePiece(int x, int y) {

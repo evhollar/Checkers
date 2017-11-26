@@ -155,7 +155,7 @@ public:
 
     /*
     * Requires: Nothing
-     * Modifies: Nothing
+    * Modifies: Nothing
     * Effects: Makes the BasicPiece a KingPiece
     */
     void upgradePiece(int x, int y);
@@ -167,12 +167,40 @@ public:
      */
     void movePiece(int x1, int y1, int x2, int y2);
 
+    /*
+    * Requires: Nothing
+    * Modifies: Nothing
+    * Effects: Returns the size of the board
+    */
     int getSize();
 
+    /*
+    * Requires: Nothing
+    * Modifies: Nothing
+    * Effects: Sends the turn to the opposite color
+    */
+    void passTurn();
+
+    /*
+    * Requires: X position, Y position
+    * Modifies: activePiece
+    * Effects: Changes the board's active piece
+    */
     void setActivePiece(int x, int y);
 
+    /*
+    * Requires: Nothing
+    * Modifies: Nothing
+    * Effects: Returns the current active piece
+    */
     point getActivePiece();
 
+    /*
+    * Requires: Nothing
+    * Modifies: Nothing
+    * Effects: Returns the indicator of whether or not
+     * there is a bonus move available.
+    */
     int getBonusMove();
 
 };

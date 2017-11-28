@@ -5,6 +5,7 @@
 #ifndef JEB2020_CHECKERS_H
 #define JEB2020_CHECKERS_H
 
+#include "shapes.h"
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -12,11 +13,6 @@
 #include <vector>
 
 using namespace std;
-
-struct point {
-    int x;
-    int y;
-};
 
 class Piece{
 protected:
@@ -172,7 +168,7 @@ public:
     * Modifies: Nothing
     * Effects: Returns the size of the board
     */
-    int getSize();
+    int getSize() const;
 
     /*
     * Requires: Nothing
@@ -193,15 +189,28 @@ public:
     * Modifies: Nothing
     * Effects: Returns the current active piece
     */
-    point getActivePiece();
+    point getActivePiece() const;
 
     /*
     * Requires: Nothing
     * Modifies: Nothing
     * Effects: Returns the indicator of whether or not
-     * there is a bonus move available.
+    * there is a bonus move available.
     */
-    int getBonusMove();
+    int getBonusMove() const;
+
+    /*
+    * Requires: Integer X
+    * Modifies: bonusMove indicator
+    * Effects: sets the bonusMove indicator to x
+    */
+    void setBonusMove(int x);
+    /*
+    * Requires: Nothing
+    * Modifies: Nothing
+    * Effects: Returns a string depending on who won the game.
+    */
+    string gameOver() const;
 
 };
 

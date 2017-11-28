@@ -360,8 +360,8 @@ void Board::movePiece(int x1, int y1, int x2, int y2) {
             }
             //RIGHT CENTER BONUS CHECK
             if (x2 > size - 3 && y2 > 1 && y2 < size - 2) {
-                if ((pieces[x2 - 2][y2 - 2]->getType() == "empty" && pieces[x2 - 1][y2 - 1]->getType() != "empty" && pieces[x2 - 1][y2 - 1]->getColor() == 0)
-                    || (pieces[x2 - 2][y2 + 2]->getType() == "empty" && pieces[x2 - 1][y2 + 1]->getType() != "empty" && pieces[x2 - 1][y2 + 1]->getColor() == 0)) {
+                if ((pieces[x2 - 2][y2 - 2]->getType() == "empty" && pieces[x2 - 1][y2 - 1]->getType() != "empty" && pieces[x2 - 1][y2 - 1]->getColor() != pieces[x2][y2]->getColor())
+                    || (pieces[x2 - 2][y2 + 2]->getType() == "empty" && pieces[x2 - 1][y2 + 1]->getType() != "empty" && pieces[x2 - 1][y2 + 1]->getColor() != pieces[x2][y2]->getColor())) {
                     //If there is a bonus capture available set the active piece to the current piece and the
                     //turn back to the original turn.
                     bonusMove = 1;
@@ -370,22 +370,22 @@ void Board::movePiece(int x1, int y1, int x2, int y2) {
                 }
             }
             //TOP CENTER BONUS CHECK
-            if (x2 > 2 && x2 < size - 2 && y2 < 2) {
-                if ((pieces[x2 - 2][y2 + 2]->getType() == "empty" && pieces[x2 - 1][y2 + 1]->getType() != "empty" && pieces[x2 - 1][y2 - 1]->getColor() != pieces[x2][y2]->getColor())
-                    || (pieces[x2 + 2][y2 + 2]->getType() == "empty" && pieces[x2 + 1][y2 + 1]->getType() != "empty" && pieces[x2 - 1][y2 + 1]->getColor() != pieces[x2][y2]->getColor())) {
+            if (x2 > 1 && x2 < size - 2 && y2 < 2) {
+                if ((pieces[x2 - 2][y2 + 2]->getType() == "empty" && pieces[x2 - 1][y2 + 1]->getType() != "empty" && pieces[x2 - 1][y2 + 1]->getColor() != pieces[x2][y2]->getColor())
+                    || (pieces[x2 + 2][y2 + 2]->getType() == "empty" && pieces[x2 + 1][y2 + 1]->getType() != "empty" && pieces[x2 + 1][y2 + 1]->getColor() != pieces[x2][y2]->getColor())) {
                     //If there is a bonus capture available set the active piece to the current piece and the
-                    //turn back to blue's turn.
+                    //turn back to the original turn.
                     bonusMove = 1;
                     activePiece = {x2, y2};
                     passTurn();
                 }
             }
             //BOTTOM CENTER BONUS CHECK
-            if (x2 > 2 && x2 < size - 2 && y2 > size - 3) {
+            if (x2 > 1 && x2 < size - 2 && y2 > size - 3) {
                 if ((pieces[x2 - 2][y2 - 2]->getType() == "empty" && pieces[x2 - 1][y2 - 1]->getType() != "empty" && pieces[x2 - 1][y2 - 1]->getColor() != pieces[x2][y2]->getColor())
-                    || (pieces[x2 + 2][y2 - 2]->getType() == "empty" && pieces[x2 + 1][y2 - 1]->getType() != "empty" && pieces[x2 - 1][y2 + 1]->getColor() != pieces[x2][y2]->getColor())) {
+                    || (pieces[x2 + 2][y2 - 2]->getType() == "empty" && pieces[x2 + 1][y2 - 1]->getType() != "empty" && pieces[x2 + 1][y2 - 1]->getColor() != pieces[x2][y2]->getColor())) {
                     //If there is a bonus capture available set the active piece to the current piece and the
-                    //turn back to blue's turn.
+                    //turn back to the original turn.
                     bonusMove = 1;
                     activePiece = {x2, y2};
                     passTurn();
@@ -395,7 +395,7 @@ void Board::movePiece(int x1, int y1, int x2, int y2) {
     }
 }
 
-int Board::getSize() {
+int Board::getSize() const {
     return size;
 }
 
@@ -411,12 +411,39 @@ void Board::setActivePiece(int x, int y) {
     activePiece = {x, y};
 }
 
-point Board::getActivePiece() {
+point Board::getActivePiece() const {
     return activePiece;
 }
 
-int Board::getBonusMove() {
+int Board::getBonusMove() const {
     return bonusMove;
+}
+
+void Board::setBonusMove(int x) {
+    bonusMove = 0;
+}
+
+string Board::gameOver() const {
+    string message = "No Win";
+    int red = 0;
+    int blue = 0;
+    for (int c = 0; c < size; ++c) {
+        for (int r = 0; r < size; ++r) {
+            if (pieces[c][r]->getColor() == 0) {
+                ++blue;
+            }
+            if (pieces[c][r]->getColor() == 1) {
+                ++red;
+            }
+        }
+    }
+    if (red == 0){
+        message = "Blue Wins!";
+    }
+    if (blue == 0){
+        message = "Red Wins!";
+    }
+    return message;
 }
 
 /*

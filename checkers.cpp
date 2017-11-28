@@ -407,6 +407,10 @@ void Board::passTurn() {
     }
 }
 
+void Board::setTurn(int x) {
+    turn = x;
+}
+
 void Board::setActivePiece(int x, int y) {
     activePiece = {x, y};
 }
@@ -510,8 +514,23 @@ void Menu::exitGame(){
 }
 
 /*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Restarts the game
+ * Requires: Board b1
+ * Modifies: board b1
+ * Effects: Restarts the game by resetting all the pieces to their default positions
  */
-void Menu::restartGame(){}
+void Menu::restartGame(Board &b1) {
+    for (int c = 0; c < b1.getSize(); ++c) {
+        for (int r = 0; r < b1.getSize(); ++r) {
+            //Adds basic or empty pieces to the board depending on the position.
+            if ((c % 2 != r % 2) && r < 3) {
+                b1.pieces[c][r] = make_unique<BasicPiece>(BasicPiece(0, {c, r}));
+            } else if ((c % 2 != r % 2) && r > b1.getSize() - 4) {
+                b1.pieces[c][r] = make_unique<BasicPiece>(BasicPiece(1, {c, r}));
+            } else {
+                b1.pieces[c][r] = make_unique<EmptyPiece>(EmptyPiece({c, r}));;
+            }
+        }
+    }
+    //Set the turn back to red's turn
+    b1.setTurn(1);
+}

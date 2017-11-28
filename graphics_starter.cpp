@@ -9,6 +9,7 @@ int wd;
 Board b1;
 vector<vector<Circle>> grid;
 vector<vector<Rect>> backGrid;
+Menu m1;
 
 
 
@@ -124,6 +125,9 @@ void kbd(unsigned char key, int x, int y)
         b1.passTurn();
         b1.setBonusMove(0);
     }
+    if (key == 114) {
+        m1.restartGame(b1);
+    }
 
     glutPostRedisplay();
 
@@ -163,7 +167,7 @@ void mouse(int button, int state, int x, int y) {
         for (int c = 0; c < b1.getSize(); ++c) {
             for (int r = 0; r < b1.getSize(); ++r) {
                 //If it's not an emptyPiece
-                if (backGrid[c][r].is_overlapping(x, y)
+                if (grid[c][r].is_overlapping(x, y)
                     //And the current piece doesn't have another available capture.
                     && b1.pieces[c][r]->getType() != "empty" && b1.getBonusMove() == 0) {
                     b1.setActivePiece(c, r);

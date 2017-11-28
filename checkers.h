@@ -178,6 +178,14 @@ public:
     void passTurn();
 
     /*
+    * Requires: int x
+    * Modifies: Board's turn field
+    * Effects: Sets the turn
+    */
+    void setTurn(int x);
+
+
+    /*
     * Requires: X position, Y position
     * Modifies: activePiece
     * Effects: Changes the board's active piece
@@ -242,7 +250,7 @@ public:
      * Modifies: Nothing
      * Effects: Restarts the game
      */
-    void restartGame();
+    void restartGame(Board &b1);
 
 };
 #endif //JEB2020_CHECKERS_H

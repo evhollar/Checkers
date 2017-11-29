@@ -135,7 +135,7 @@ void kbd(unsigned char key, int x, int y)
     }
     //l will load the game
     if (key == 108) {
-        m1.loadGame("checkerSaveData.txt", b1.pieces);
+        m1.loadGame("checkersSaveData.txt", b1.pieces);
     }
 
 

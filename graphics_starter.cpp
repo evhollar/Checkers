@@ -125,9 +125,19 @@ void kbd(unsigned char key, int x, int y)
         b1.passTurn();
         b1.setBonusMove(0);
     }
+    //r will restart the game
     if (key == 114) {
         m1.restartGame(b1);
     }
+    //s will save the game
+    if (key == 115) {
+        m1.saveGame(b1.pieces);
+    }
+    //l will load the game
+    if (key == 108) {
+        m1.loadGame("checkerSaveData.txt", b1.pieces);
+    }
+
 
     glutPostRedisplay();
 

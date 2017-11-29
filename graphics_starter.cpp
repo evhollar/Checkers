@@ -135,7 +135,7 @@ void kbd(unsigned char key, int x, int y)
     }
     //l will load the game
     if (key == 108) {
-        m1.loadGame("checkerSaveData.txt", b1.pieces);
+        m1.loadGame("checkersSaveData.txt", b1.pieces);
     }
 
 
@@ -215,7 +215,7 @@ int graphicsPlay(int argc, char** argv) {
     glutInitWindowSize((int)width, (int)height);
     glutInitWindowPosition(300, 100); // Position the window's initial top-left corner
     /* create the window and store the handle to it */
-    wd = glutCreateWindow("Evan Attempts Graphics" /* title */ );
+    wd = glutCreateWindow("Checkers!" /* title */ );
 
     // Register callback handler for window re-paint event
     glutDisplayFunc(display);

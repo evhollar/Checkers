@@ -178,6 +178,13 @@ public:
     void passTurn();
 
     /*
+    * Requires: Nothing
+    * Modifies: Nothing
+    * Effects: Returns the current turn
+    */
+    int getTurn() const;
+
+    /*
     * Requires: int x
     * Modifies: Board's turn field
     * Effects: Sets the turn
@@ -229,21 +236,15 @@ public:
      * Modifies: Nothing
      * Effects: Saves the game
      */
-    void saveGame(const vector<vector<unique_ptr<Piece>>> &pieces);
+    void saveGame(const Board &b1);
 
     /*
      * Requires: Nothing
      * Modifies: Nothing
      * Effects: Loads the game
      */
-    void loadGame(string fileName, vector<vector<unique_ptr<Piece>>> &pieces);
+    void loadGame(string fileName, Board &b1);
 
-    /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Exits the game
-     */
-    void exitGame();
 
     /*
      * Requires: Nothing

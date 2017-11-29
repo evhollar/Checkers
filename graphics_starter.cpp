@@ -131,11 +131,11 @@ void kbd(unsigned char key, int x, int y)
     }
     //s will save the game
     if (key == 115) {
-        m1.saveGame(b1.pieces);
+        m1.saveGame(b1);
     }
     //l will load the game
     if (key == 108) {
-        m1.loadGame("checkersSaveData.txt", b1.pieces);
+        m1.loadGame("checkersSaveData.txt", b1);
     }
 
 

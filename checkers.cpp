@@ -407,6 +407,10 @@ void Board::passTurn() {
     }
 }
 
+int Board::getTurn() const {
+    return turn;
+}
+
 void Board::setTurn(int x) {
     turn = x;
 }
@@ -424,7 +428,7 @@ int Board::getBonusMove() const {
 }
 
 void Board::setBonusMove(int x) {
-    bonusMove = 0;
+    bonusMove = x;
 }
 
 string Board::gameOver() const {
@@ -455,17 +459,19 @@ string Board::gameOver() const {
  * Modifies: Nothing
  * Effects: Saves the game by storing the positions, types, and colors of all pieces on the board.
  */
-void Menu::saveGame(const vector<vector<unique_ptr<Piece>>> &pieces) {
+void Menu::saveGame(const Board &b1) {
     ofstream f_out("checkersSaveData.txt", ios::app);
     if (f_out) {
-        for (int c = 0; c < pieces.size(); c++) {
-            for (int r = 0; r < pieces.size(); r++) {
-                f_out << pieces[c][r]->getType() << endl;
-                f_out << pieces[c][r]->getPosition().x << endl;
-                f_out << pieces[c][r]->getPosition().y << endl;
-                f_out << pieces[c][r]->getColor() << endl;
+        for (int c = 0; c < b1.pieces.size(); c++) {
+            for (int r = 0; r < b1.pieces.size(); r++) {
+                f_out << b1.pieces[c][r]->getType() << endl;
+                f_out << b1.pieces[c][r]->getPosition().x << endl;
+                f_out << b1.pieces[c][r]->getPosition().y << endl;
+                f_out << b1.pieces[c][r]->getColor() << endl;
             }
         }
+        f_out << "turn" << endl;
+        f_out << b1.getTurn() << endl;
         f_out.close();
     }
 }
@@ -475,42 +481,38 @@ void Menu::saveGame(const vector<vector<unique_ptr<Piece>>> &pieces) {
  * Modifies: Nothing
  * Effects: Loads the last saved game.
  */
-void Menu::loadGame(string fileName, vector<vector<unique_ptr<Piece>>> &pieces){
+void Menu::loadGame(string fileName, Board &b1) {
     ifstream f_in(fileName);
-    while (f_in){
+    while (f_in) {
         string word = "";
         int tempX;
         int tempY;
         int tempColor;
         getline(f_in, word);
-        if(word == "empty") {
+        if (word == "empty") {
             f_in >> tempX;
             f_in >> tempY;
             f_in >> tempColor;
-            pieces[tempX][tempY] = make_unique<EmptyPiece>(EmptyPiece({tempX, tempY}));
-        } if(word == "basic"){
+            b1.pieces[tempX][tempY] = make_unique<EmptyPiece>(EmptyPiece({tempX, tempY}));
+        }
+        if (word == "basic") {
             f_in >> tempX;
             f_in >> tempY;
             f_in >> tempColor;
-            pieces[tempX][tempY] = make_unique<BasicPiece>(BasicPiece(tempColor, {tempX, tempY}));
-        } if (word == "king"){
+            b1.pieces[tempX][tempY] = make_unique<BasicPiece>(BasicPiece(tempColor, {tempX, tempY}));
+        }
+        if (word == "king") {
             f_in >> tempX;
             f_in >> tempY;
             f_in >> tempColor;
-            pieces[tempX][tempY] = make_unique<KingPiece>(KingPiece(tempColor, {tempX, tempY}));
+            b1.pieces[tempX][tempY] = make_unique<KingPiece>(KingPiece(tempColor, {tempX, tempY}));
+        }
+        if (word == "turn") {
+            f_in >> tempX;
+            b1.setTurn(tempX);
         }
 
     }
-
-}
-
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Exits the game
- */
-void Menu::exitGame(){
-
 }
 
 /*

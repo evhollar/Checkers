@@ -14,7 +14,7 @@ Menu m1;
 
 
 void init() {
-    //Create the 2D vector that will form the board
+    //Create the 2D vector that will form the board pieces and the background grid
     for (int c = 0; c < b1.getSize(); ++c) {
         grid.push_back(vector<Circle>(b1.getSize()));
         backGrid.push_back(vector<Rect>(b1.getSize()));
@@ -34,7 +34,6 @@ void init() {
     }
 
 }
-
 /* Initialize OpenGL Graphics */
 void initGL() {
     // Set "clearing" or background color
@@ -46,7 +45,6 @@ void initGL() {
 void display() {
     // tell OpenGL to use the whole window for drawing
     glViewport(0, 0, width, height);
-
     // do an orthographic parallel projection with the coordinate
     // system set to first quadrant, limited by screen/window size
     glMatrixMode(GL_PROJECTION);
@@ -58,60 +56,58 @@ void display() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     //Correctly color the board, add the pieces, and draw them.
-    for (int c = 0; c < b1.getSize(); ++c) {
-        for (int r = 0; r < b1.getSize(); ++r) {
-            if(b1.pieces[c][r]->getType() == "basic" && b1.pieces[c][r]->getColor() == 1){
-                grid[c][r].set_fill(1,.3,.3);
-            }
-            if(b1.pieces[c][r]->getType() == "king" && b1.pieces[c][r]->getColor() == 1){
-                grid[c][r].set_fill(.8,0,0);
-            }
-            if(b1.pieces[c][r]->getType() == "basic" && b1.pieces[c][r]->getColor() == 0){
-                grid[c][r].set_fill(.3,.3,1);
-            }
-            if(b1.pieces[c][r]->getType() == "king" && b1.pieces[c][r]->getColor() == 0){
-                grid[c][r].set_fill(0,0,.8);
-            }
-            else if(b1.pieces[c][r]->getType() == "empty"){
-                if (c % 2 == r % 2) {
-                    grid[c][r].set_fill(0, 0, 0);
-                    backGrid[c][r].set_fill(0, 0, 0);
-                }
-                else {
-                    grid[c][r].set_fill(1, 1, 1);
-                }
-            }
-            backGrid[c][r].draw();
-            grid[c][r].draw();
-        }
-    }
-/*    if (b1.gameOver() == "Red Wins!" || b1.gameOver() == "Blue Wins!") {
+    if (b1.gameOver() == "No Win") {
         for (int c = 0; c < b1.getSize(); ++c) {
             for (int r = 0; r < b1.getSize(); ++r) {
-                grid[c][r].set_fill({0.9, 0.9, 0.9});
-                string message = b1.gameOver();
-                glColor3f(0, 0, 0);
-                glRasterPos2i(100, 300);
-                for (int i = 0; i < message.length(); ++i) {
-                    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[i]);
+                if (b1.pieces[c][r]->getType() == "basic" && b1.pieces[c][r]->getColor() == 1) {
+                    grid[c][r].set_fill(1, .3, .3);
                 }
+                if (b1.pieces[c][r]->getType() == "king" && b1.pieces[c][r]->getColor() == 1) {
+                    grid[c][r].set_fill(.8, 0, 0);
+                }
+                if (b1.pieces[c][r]->getType() == "basic" && b1.pieces[c][r]->getColor() == 0) {
+                    grid[c][r].set_fill(.3, .3, 1);
+                }
+                if (b1.pieces[c][r]->getType() == "king" && b1.pieces[c][r]->getColor() == 0) {
+                    grid[c][r].set_fill(0, 0, .8);
+                } else if (b1.pieces[c][r]->getType() == "empty") {
+                    if (c % 2 == r % 2) {
+                        grid[c][r].set_fill(0, 0, 0);
+                        backGrid[c][r].set_fill(0, 0, 0);
+                    } else {
+                        grid[c][r].set_fill(1, 1, 1);
+                    }
+                }
+                backGrid[c][r].draw();
+                grid[c][r].draw();
             }
         }
-    }*/
+    }
     //Print a "K" on each king piece to help differentiate them from basic pieces.
-    for (int c = 0; c < b1.getSize(); ++c) {
-        for (int r = 0; r < b1.getSize(); ++r) {
-            if (b1.pieces[c][r]->getType() == "king") {
-                string message = "K";
-                glRasterPos2i((width/b1.getSize())*c + (width/b1.getSize())/2 - 9, (height/b1.getSize())*r + (height/b1.getSize())/2 + 7);
-                glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[0]);
+    if (b1.gameOver() == "No Win") {
+        for (int c = 0; c < b1.getSize(); ++c) {
+            for (int r = 0; r < b1.getSize(); ++r) {
+                if (b1.pieces[c][r]->getType() == "king") {
+                    string message = "K";
+                    glRasterPos2i((width / b1.getSize()) * c + (width / b1.getSize()) / 2 - 9,
+                                  (height / b1.getSize()) * r + (height / b1.getSize()) / 2 + 7);
+                    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[0]);
+                }
             }
         }
     }
 
-    glFlush();  // Render now
-}
-
+    //Print the game over screen if either color has won
+    if (b1.gameOver() == "Red Wins!" || b1.gameOver() == "Blue Wins") {
+        glColor3f(0, 0, 0);
+        glRasterPos2i(width / 2 - 60, height / 2 - 12);
+        string message = b1.gameOver();
+        for (int i = 0; i < message.length(); ++i) {
+            glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[i]);
+        }
+    }
+        glFlush();  // Render now
+    }
 // http://www.theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
 void kbd(unsigned char key, int x, int y)
 {
@@ -159,11 +155,9 @@ void kbdS(int key, int x, int y) {
 
     glutPostRedisplay();
 
-    return;
 }
 
 void cursor(int x, int y) {
-
 
     glutPostRedisplay();
 }

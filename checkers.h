@@ -136,13 +136,6 @@ public:
     Board();
 
     /*
-     * Requires: Nothing
-     * Modifies: Nothing
-     * Effects: Draws the board with all pieces
-     */
-    void draw();
-
-    /*
     * Requires: int x and int y
     * Modifies: pieces vector
     * Effects: Removes piece at x, y and replaces it with an empty piece

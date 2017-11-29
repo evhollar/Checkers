@@ -136,14 +136,6 @@ Board::Board(){
         pieces.push_back(move(col));
     }
 }
-/*
- * Requires: Nothing
- * Modifies: Nothing
- * Effects: Draws the board with all pieces
- */
-void Board::draw(){
-
-}
 
 /*
  * Requires: int x and int y
@@ -231,7 +223,7 @@ void Board::movePiece(int x1, int y1, int x2, int y2) {
     if (y2 == size - 1 && pieces[x2][y2]->getType() == "basic" && pieces[x2][y2]->getColor() == 0) {
         upgradePiece(x2, y2);
         //If the piece was upgraded on a capture move and there is another capture move available
-        if (y1 == size - 3 && x2 > 2 && x2 < size - 2 &&
+        if (y1 == size - 3 && x2 > 1 && x2 < size - 2 &&
             ((pieces[x2 - 2][y2 - 2]->getType() == "empty" && pieces[x2 - 1][y2 - 1]->getColor() == 1)
              || (pieces[x2 + 2][y2 - 2]->getType() == "empty" && pieces[x2 + 1][y2 - 1]->getColor() == 1))) {
             bonusMove = 1;
@@ -300,7 +292,7 @@ void Board::movePiece(int x1, int y1, int x2, int y2) {
         upgradePiece(x2, y2);
         //If the piece was upgrades on a capture move and there is another capture move available
         //for the new king
-        if (y1 == 2 && x2 > 2 && x2 < size - 2 &&
+        if (y1 == 2 && x2 > 1 && x2 < size - 2 &&
             ((pieces[x2 - 2][y2 + 2]->getType() == "empty" && pieces[x2 - 1][y2 + 1]->getColor() == 0)
              || (pieces[x2 + 2][y2 + 2]->getType() == "empty" && pieces[x2 + 1][y2 + 1]->getColor() == 0))) {
             //Set it to the active piece and the turn to red's turn

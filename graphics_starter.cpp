@@ -61,24 +61,27 @@ void display() {
     //Correctly color the board and add the pieces
         for (int c = 0; c < b1.getSize(); ++c) {
             for (int r = 0; r < b1.getSize(); ++r) {
-                grid[c][r].set_radius(width/b1.getSize()/2 - 2);
                 if (b1.pieces[c][r]->getType() == "basic" && b1.pieces[c][r]->getColor() == 1) {
                     grid[c][r].set_fill(1, .3, .3);
+                    grid[c][r].set_radius(width/b1.getSize()/2 - 2);
                 }
                 if (b1.pieces[c][r]->getType() == "king" && b1.pieces[c][r]->getColor() == 1) {
                     grid[c][r].set_fill(.8, 0, 0);
+                    grid[c][r].set_radius(width/b1.getSize()/2 - 2);
                 }
                 if (b1.pieces[c][r]->getType() == "basic" && b1.pieces[c][r]->getColor() == 0) {
                     grid[c][r].set_fill(.3, .3, 1);
+                    grid[c][r].set_radius(width/b1.getSize()/2 - 2);
                 }
                 if (b1.pieces[c][r]->getType() == "king" && b1.pieces[c][r]->getColor() == 0) {
                     grid[c][r].set_fill(0, 0, .8);
+                    grid[c][r].set_radius(width/b1.getSize()/2 - 2);
                 } else if (b1.pieces[c][r]->getType() == "empty") {
                     if (c % 2 == r % 2) {
-                        grid[c][r].set_fill(0, 0, 0);
+                        grid[c][r].set_radius(0);
                         backGrid[c][r].set_fill(0, 0, 0);
                     } else {
-                        grid[c][r].set_fill(1, 1, 1);
+                        grid[c][r].set_radius(0);
                     }
                 }
             }
@@ -140,7 +143,7 @@ void display() {
             c1.set_radius(width/b1.getSize()/2 - 2);
         }
     }
-    if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getColor() == 1){
+    else if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getColor() == 1){
         if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getType() == "basic") {
             c1.set_fill(1, .3, .3);
             c1.set_radius(width/b1.getSize()/2 - 2);

@@ -172,11 +172,6 @@ void kbd(unsigned char key, int x, int y)
         glutDestroyWindow(wd);
         exit(0);
     }
-    //Space allows player to elect not to take a bonus move
-    if (key == 32 && b1.getBonusMove() == 1) {
-        b1.passTurn();
-        b1.setBonusMove(0);
-    }
     //r will restart the game
     if (key == 114) {
         m1.restartGame(b1);
@@ -252,6 +247,10 @@ void mouse(int button, int state, int x, int y) {
     //Left button sets the piece down. Changes the active piece to an empty piece
     if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
         b1.setActivePiece(0, 0);
+        if (b1.getBonusMove() == 1) {
+            b1.passTurn();
+            b1.setBonusMove(0);
+        }
     }
     glutPostRedisplay();
 }

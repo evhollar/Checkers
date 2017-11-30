@@ -424,7 +424,6 @@ void Board::setBonusMove(int x) {
 }
 
 string Board::gameOver() const {
-    string message = "No Win";
     int red = 0;
     int blue = 0;
     for (int c = 0; c < size; ++c) {
@@ -437,13 +436,13 @@ string Board::gameOver() const {
             }
         }
     }
-    if (red == 0){
-        message = "Blue Wins!";
-    }
     if (blue == 0){
-        message = "Red Wins!";
+        return "Red Wins!";
     }
-    return message;
+    if (red == 0){
+        return "Blue Wins!";
+    }
+    return "No Win";
 }
 
 /*

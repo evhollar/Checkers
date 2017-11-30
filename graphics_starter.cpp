@@ -98,8 +98,13 @@ void display() {
     }
 
     //Print the game over screen if either color has won
-    if (b1.gameOver() == "Red Wins!" || b1.gameOver() == "Blue Wins") {
-        glColor3f(0, 0, 0);
+    if (b1.gameOver() == "Blue Wins!" || b1.gameOver() == "Red Wins!") {
+        if (b1.gameOver() == "Blue Wins!") {
+            glColor3f(0, 0, 1);
+        }
+        if (b1.gameOver() == "Red Wins!") {
+            glColor3f(1, 0, 0);
+        }
         glRasterPos2i(width / 2 - 60, height / 2 - 12);
         string message = b1.gameOver();
         for (int i = 0; i < message.length(); ++i) {

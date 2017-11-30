@@ -473,6 +473,7 @@ void Menu::saveGame(const Board &b1) {
  * Effects: Loads the last saved game.
  */
 void Menu::loadGame(string fileName, Board &b1) {
+    b1.setActivePiece(0, 0);
     ifstream f_in(fileName);
     while (f_in) {
         string word = "";
@@ -512,6 +513,7 @@ void Menu::loadGame(string fileName, Board &b1) {
  * Effects: Restarts the game by resetting all the pieces to their default positions
  */
 void Menu::restartGame(Board &b1) {
+    b1.setActivePiece(0, 0);
     for (int c = 0; c < b1.getSize(); ++c) {
         for (int r = 0; r < b1.getSize(); ++r) {
             //Adds basic or empty pieces to the board depending on the position.

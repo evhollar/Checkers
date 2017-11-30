@@ -90,7 +90,7 @@ void display() {
     //represented by c1.
     grid[b1.getActivePiece().x][b1.getActivePiece().y].set_radius(0);
 
-    //If the game isn't over, draw the pieces
+    //If the game isn't over, draw the pieces and the background board
     if (b1.gameOver() == "No Win") {
         for (int c = 0; c < b1.getSize(); ++c) {
             for (int r = 0; r < b1.getSize(); ++r) {
@@ -215,6 +215,15 @@ void cursor(int x, int y) {
     c1.set_position(x, y);
     mouseX = x;
     mouseY = y;
+    for (int c = 0; c < b1.getSize(); ++c) {
+        for (int r = 0; r < b1.getSize(); ++r) {
+           if (backGrid[c][r].is_overlapping(x, y) && b1.pieces[c][r]->getColor() == b1.getTurn()){
+               backGrid[c][r].set_fill(1, 1, 0);
+           } else {
+               backGrid[c][r].set_fill(1, 1, 1);
+           }
+        }
+    }
 }
 
 // button will be GLUT_LEFT_BUTTON or GLUT_RIGHT_BUTTON

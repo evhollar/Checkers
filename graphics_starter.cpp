@@ -11,6 +11,8 @@ vector<vector<Circle>> grid;
 vector<vector<Rect>> backGrid;
 Circle c1;
 Menu m1;
+int mouseY;
+int mouseX;
 
 
 
@@ -99,7 +101,9 @@ void display() {
     if (b1.gameOver() == "No Win") {
         for (int c = 0; c < b1.getSize(); ++c) {
             for (int r = 0; r < b1.getSize(); ++r) {
-                if (b1.pieces[c][r]->getType() == "king") {
+                if (b1.pieces[c][r]->getType() == "king" &&
+                        //Wont draw a k on the board if the king is the active piece
+                        ((c != b1.getActivePiece().x) || (r != b1.getActivePiece().y))){
                     string message = "K";
                     glRasterPos2i((width / b1.getSize()) * c + (width / b1.getSize()) / 2 - 9,
                                   (height / b1.getSize()) * r + (height / b1.getSize()) / 2 + 7);
@@ -150,6 +154,13 @@ void display() {
         c1.set_radius(0);
     }
     c1.draw();
+    //Draws a "K" on the moving piece if it's a king piece
+    if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getType() == "king"){
+        glColor3f(0, 0, 0);
+        string message = "K";
+        glRasterPos2i(mouseX - 9, mouseY + 7);
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[0]);
+    }
     glFlush();  // Render now
     }
 
@@ -204,7 +215,8 @@ void kbdS(int key, int x, int y) {
 
 void cursor(int x, int y) {
     c1.set_position(x, y);
-    glutPostRedisplay();
+    mouseX = x;
+    mouseY = y;
 }
 
 // button will be GLUT_LEFT_BUTTON or GLUT_RIGHT_BUTTON

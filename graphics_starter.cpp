@@ -9,6 +9,7 @@ int wd;
 Board b1;
 vector<vector<Circle>> grid;
 vector<vector<Rect>> backGrid;
+Circle c1;
 Menu m1;
 
 
@@ -25,7 +26,7 @@ void init() {
     //Declare all the shapes for the board
     for (int c = 0; c < b1.getSize(); ++c) {
         for (int r = 0; r < b1.getSize(); ++r) {
-            grid[c][r] = Circle((width/b1.getSize())/2 - 2, {0, 0, 0});
+            grid[c][r] = Circle(1, {0, 0, 0});
             grid[c][r].set_position((width/b1.getSize())*c + (width/b1.getSize())/2, (height/b1.getSize())*r + (height/b1.getSize())/2);
             backGrid[c][r] = Rect((width/b1.getSize()), height/b1.getSize(), {1, 1, 1});
             backGrid[c][r].set_position((width/b1.getSize())*c, (height/b1.getSize())*r);
@@ -55,10 +56,10 @@ void display() {
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    //Correctly color the board, add the pieces, and draw them.
-    if (b1.gameOver() == "No Win") {
+    //Correctly color the board and add the pieces
         for (int c = 0; c < b1.getSize(); ++c) {
             for (int r = 0; r < b1.getSize(); ++r) {
+                grid[c][r].set_radius(width/b1.getSize()/2 - 2);
                 if (b1.pieces[c][r]->getType() == "basic" && b1.pieces[c][r]->getColor() == 1) {
                     grid[c][r].set_fill(1, .3, .3);
                 }
@@ -78,11 +79,22 @@ void display() {
                         grid[c][r].set_fill(1, 1, 1);
                     }
                 }
+            }
+        }
+    //Set the active piece radius to 0 to simulate it being picked up by the mouse. Its is being
+    //represented by c1.
+    grid[b1.getActivePiece().x][b1.getActivePiece().y].set_radius(0);
+
+    //If the game isn't over, draw the pieces
+    if (b1.gameOver() == "No Win") {
+        for (int c = 0; c < b1.getSize(); ++c) {
+            for (int r = 0; r < b1.getSize(); ++r) {
                 backGrid[c][r].draw();
                 grid[c][r].draw();
             }
         }
     }
+
     //Print a "K" on each king piece to help differentiate them from basic pieces.
     if (b1.gameOver() == "No Win") {
         for (int c = 0; c < b1.getSize(); ++c) {
@@ -111,8 +123,36 @@ void display() {
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[i]);
         }
     }
-        glFlush();  // Render now
+
+    //Allows for players to "pick up" board pieces and move them. Colors circle c1
+    //which follows the mouse depending on what color and type the active piece is.
+    if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getColor() == 0){
+        if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getType() == "basic") {
+            c1.set_fill(.3, .3, 1);
+            c1.set_radius(width/b1.getSize()/2 - 2);
+        }
+        if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getType() == "king") {
+            c1.set_fill(0, 0, .8);
+            c1.set_radius(width/b1.getSize()/2 - 2);
+        }
     }
+    if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getColor() == 1){
+        if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getType() == "basic") {
+            c1.set_fill(1, .3, .3);
+            c1.set_radius(width/b1.getSize()/2 - 2);
+        }
+        if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getType() == "king") {
+            c1.set_fill(.8, 0, 0);
+            c1.set_radius(width/b1.getSize()/2 - 2);
+        }
+    }
+    if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getType() == "empty"){
+        c1.set_radius(0);
+    }
+    c1.draw();
+    glFlush();  // Render now
+    }
+
 // http://www.theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
 void kbd(unsigned char key, int x, int y)
 {
@@ -163,7 +203,7 @@ void kbdS(int key, int x, int y) {
 }
 
 void cursor(int x, int y) {
-
+    c1.set_position(x, y);
     glutPostRedisplay();
 }
 
@@ -178,7 +218,11 @@ void mouse(int button, int state, int x, int y) {
                 //If it's not an emptyPiece
                 if (grid[c][r].is_overlapping(x, y)
                     //And the current piece doesn't have another available capture.
-                    && b1.pieces[c][r]->getType() != "empty" && b1.getBonusMove() == 0) {
+                    && b1.pieces[c][r]->getType() != "empty"
+                    && b1.getBonusMove() == 0
+                    //And it is that piece's turn
+                    && b1.pieces[c][r]->getColor() == b1.getTurn()) {
+                    //Move the piece
                     b1.setActivePiece(c, r);
                 }
                 //If it is a viable empty piece
@@ -192,6 +236,10 @@ void mouse(int button, int state, int x, int y) {
                 }
             }
         }
+    }
+    //Left button sets the piece down. Changes the active piece to an empty piece
+    if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+        b1.setActivePiece(0, 0);
     }
     glutPostRedisplay();
 }

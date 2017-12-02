@@ -27,6 +27,9 @@ void display_start();
 // draws all of the game logic
 void display_game();
 
+// draws the end game screen
+void display_game_over();
+
 // Callback functions for GLUT */
 
 // Draw the window - this is where all the GL actions are

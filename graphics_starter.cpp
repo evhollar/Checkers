@@ -7,7 +7,7 @@
 GLdouble width, height;
 int wd;
 
-enum screen_type {start, game};
+enum screen_type {start, game, gameOver};
 
 Board b1;
 vector<vector<Circle>> grid;
@@ -49,7 +49,16 @@ void initGL() {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
+//Draws the start screen
 void display_start() {
+    for (int c = 0; c < b1.getSize(); ++c) {
+        for (int r = 0; r < b1.getSize(); ++r) {
+            if (c % 2 == r % 2) {
+                backGrid[c][r].set_fill(.9, .9, .9);
+            }
+            backGrid[c][r].draw();
+        }
+    }
     //Print out the start screen message
     string message = "Checkers";
     glColor3f(0, 0, 0);
@@ -105,7 +114,7 @@ void display_game() {
             } else if (b1.pieces[c][r]->getType() == "empty") {
                 if (c % 2 == r % 2) {
                     grid[c][r].set_radius(0);
-                    backGrid[c][r].set_fill(0, 0, 0);
+                    backGrid[c][r].set_fill(.2, .2, .2);
                 } else {
                     grid[c][r].set_radius(0);
                 }
@@ -121,18 +130,16 @@ void display_game() {
         backGrid[b1.getActivePiece().x][b1.getActivePiece().y].set_fill(1, 1, 0);
     }
 
-    //If the game isn't over, draw the pieces and the background board
-    if (b1.gameOver() == "No Win") {
+    //Draw the pieces and the background board
         for (int c = 0; c < b1.getSize(); ++c) {
             for (int r = 0; r < b1.getSize(); ++r) {
                 backGrid[c][r].draw();
                 grid[c][r].draw();
             }
         }
-    }
+
 
     //Print a "K" on each king piece to help differentiate them from basic pieces.
-    if (b1.gameOver() == "No Win") {
         for (int c = 0; c < b1.getSize(); ++c) {
             for (int r = 0; r < b1.getSize(); ++r) {
                 if (b1.pieces[c][r]->getType() == "king" &&
@@ -145,22 +152,6 @@ void display_game() {
                 }
             }
         }
-    }
-
-    //Print the game over screen if either color has won
-    if (b1.gameOver() == "Blue Wins!" || b1.gameOver() == "Red Wins!") {
-        if (b1.gameOver() == "Blue Wins!") {
-            glColor3f(0, 0, 1);
-        }
-        if (b1.gameOver() == "Red Wins!") {
-            glColor3f(1, 0, 0);
-        }
-        glRasterPos2i(width / 2 - 60, height / 2 - 12);
-        string message = b1.gameOver();
-        for (int i = 0; i < message.length(); ++i) {
-            glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[i]);
-        }
-    }
 
     //Allows for players to "pick up" board pieces and move them. Colors circle c1
     //which follows the mouse depending on what color and type the active piece is.
@@ -184,6 +175,7 @@ void display_game() {
             c1.set_radius(width/b1.getSize()/2 - 2);
         }
     }
+    //Make c1 invisible if there is no piece currently being carried by the mouse
     if(b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getType() == "empty"){
         c1.set_radius(0);
     }
@@ -194,6 +186,21 @@ void display_game() {
         string message = "K";
         glRasterPos2i(mouseX - 9, mouseY + 7);
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[0]);
+    }
+}
+
+void display_game_over() {
+    //Print the game over screen if either color has won
+        if (b1.gameOver() == "Blue Wins!") {
+            glColor3f(0, 0, 1);
+        }
+        if (b1.gameOver() == "Red Wins!") {
+            glColor3f(1, 0, 0);
+        }
+        glRasterPos2i(width / 2 - 60, height / 2 - 12);
+        string message = b1.gameOver();
+        for (int i = 0; i < message.length(); ++i) {
+            glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[i]);
     }
 }
 
@@ -218,6 +225,8 @@ void display() {
             break;
         case game: display_game();
             break;
+        case gameOver: display_game_over();
+            break;
     }
     glFlush();  // Render now
 }
@@ -230,9 +239,9 @@ void kbd(unsigned char key, int x, int y)
         glutDestroyWindow(wd);
         exit(0);
     }
-    if (screen == game) {
         //r will restart the game
         if (key == 114) {
+            screen = game;
             m1.restartGame(b1);
         }
         //s will save the game
@@ -241,9 +250,9 @@ void kbd(unsigned char key, int x, int y)
         }
         //l will load the game
         if (key == 108) {
+            screen = game;
             m1.loadGame("checkersSaveData.txt", b1);
         }
-    }
 
 
     glutPostRedisplay();
@@ -331,6 +340,9 @@ void mouse(int button, int state, int x, int y) {
                 b1.setBonusMove(0);
             }
         }
+    }
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && b1.gameOver() != "No Win") {
+        screen = gameOver;
     }
     glutPostRedisplay();
 }

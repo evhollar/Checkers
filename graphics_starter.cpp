@@ -6,11 +6,15 @@
 
 GLdouble width, height;
 int wd;
+
+enum screen_type {start, game};
+
 Board b1;
 vector<vector<Circle>> grid;
 vector<vector<Rect>> backGrid;
 Circle c1;
 Menu m1;
+screen_type screen;
 int mouseY;
 int mouseX;
 
@@ -36,6 +40,8 @@ void init() {
         }
     }
 
+    screen = start;
+
 }
 /* Initialize OpenGL Graphics */
 void initGL() {
@@ -43,52 +49,77 @@ void initGL() {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-/* Handler for window-repaint event. Call back when the window first appears and
- whenever the window needs to be re-painted. */
-void display() {
-    // tell OpenGL to use the whole window for drawing
-    glViewport(0, 0, width, height);
-    // do an orthographic parallel projection with the coordinate
-    // system set to first quadrant, limited by screen/window size
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0.0, width, height, 0.0, -1.f, 1.f);
+void display_start() {
+    //Print out the start screen message
+    string message = "Checkers";
+    glColor3f(0, 0, 0);
+    glRasterPos2i(width / 2 - 45, height / 2 - 100);
+    for (int i = 0; i < message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[i]);
+    }
+    message = "Evan Hollar";
+    glColor3f(0, 0, 0);
+    glRasterPos2i(width / 2 - 27, height / 2 - 50);
+    for (int i = 0; i < message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, message[i]);
+    }
+    message = "Bastien Taylor";
+    glColor3f(0, 0, 0);
+    glRasterPos2i(width / 2 - 30, height / 2 - 30);
+    for (int i = 0; i < message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, message[i]);
+    }
+    message = "Jason Campbell";
+    glColor3f(0, 0, 0);
+    glRasterPos2i(width / 2 - 32, height / 2 - 10);
+    for (int i = 0; i < message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, message[i]);
+    }
+    message = "Click anywhere to begin";
+    glColor3f(0, 0, 0);
+    glRasterPos2i(width / 2 - 115, height / 2 + 40);
+    for (int i = 0; i < message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[i]);
+    }
+}
 
-    glClear(GL_COLOR_BUFFER_BIT);   // Clear the color buffer with current clearing color
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-    //Correctly color the board and add the pieces
-        for (int c = 0; c < b1.getSize(); ++c) {
-            for (int r = 0; r < b1.getSize(); ++r) {
-                if (b1.pieces[c][r]->getType() == "basic" && b1.pieces[c][r]->getColor() == 1) {
-                    grid[c][r].set_fill(1, .3, .3);
-                    grid[c][r].set_radius(width/b1.getSize()/2 - 2);
-                }
-                if (b1.pieces[c][r]->getType() == "king" && b1.pieces[c][r]->getColor() == 1) {
-                    grid[c][r].set_fill(.8, 0, 0);
-                    grid[c][r].set_radius(width/b1.getSize()/2 - 2);
-                }
-                if (b1.pieces[c][r]->getType() == "basic" && b1.pieces[c][r]->getColor() == 0) {
-                    grid[c][r].set_fill(.3, .3, 1);
-                    grid[c][r].set_radius(width/b1.getSize()/2 - 2);
-                }
-                if (b1.pieces[c][r]->getType() == "king" && b1.pieces[c][r]->getColor() == 0) {
-                    grid[c][r].set_fill(0, 0, .8);
-                    grid[c][r].set_radius(width/b1.getSize()/2 - 2);
-                } else if (b1.pieces[c][r]->getType() == "empty") {
-                    if (c % 2 == r % 2) {
-                        grid[c][r].set_radius(0);
-                        backGrid[c][r].set_fill(0, 0, 0);
-                    } else {
-                        grid[c][r].set_radius(0);
-                    }
+void display_game() {
+//Correctly color the board and add the pieces
+    for (int c = 0; c < b1.getSize(); ++c) {
+        for (int r = 0; r < b1.getSize(); ++r) {
+            if (b1.pieces[c][r]->getType() == "basic" && b1.pieces[c][r]->getColor() == 1) {
+                grid[c][r].set_fill(1, .3, .3);
+                grid[c][r].set_radius(width/b1.getSize()/2 - 2);
+            }
+            if (b1.pieces[c][r]->getType() == "king" && b1.pieces[c][r]->getColor() == 1) {
+                grid[c][r].set_fill(.8, 0, 0);
+                grid[c][r].set_radius(width/b1.getSize()/2 - 2);
+            }
+            if (b1.pieces[c][r]->getType() == "basic" && b1.pieces[c][r]->getColor() == 0) {
+                grid[c][r].set_fill(.3, .3, 1);
+                grid[c][r].set_radius(width/b1.getSize()/2 - 2);
+            }
+            if (b1.pieces[c][r]->getType() == "king" && b1.pieces[c][r]->getColor() == 0) {
+                grid[c][r].set_fill(0, 0, .8);
+                grid[c][r].set_radius(width/b1.getSize()/2 - 2);
+            } else if (b1.pieces[c][r]->getType() == "empty") {
+                if (c % 2 == r % 2) {
+                    grid[c][r].set_radius(0);
+                    backGrid[c][r].set_fill(0, 0, 0);
+                } else {
+                    grid[c][r].set_radius(0);
                 }
             }
         }
+    }
     //Set the active piece radius to 0 to simulate it being picked up by the mouse. Its is being
     //represented by c1.
     grid[b1.getActivePiece().x][b1.getActivePiece().y].set_radius(0);
+
+    //Color the active piece's background to yellow
+    if (b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getType() != "empty") {
+        backGrid[b1.getActivePiece().x][b1.getActivePiece().y].set_fill(1, 1, 0);
+    }
 
     //If the game isn't over, draw the pieces and the background board
     if (b1.gameOver() == "No Win") {
@@ -105,8 +136,8 @@ void display() {
         for (int c = 0; c < b1.getSize(); ++c) {
             for (int r = 0; r < b1.getSize(); ++r) {
                 if (b1.pieces[c][r]->getType() == "king" &&
-                        //Wont draw a k on the board if the king is the active piece
-                        ((c != b1.getActivePiece().x) || (r != b1.getActivePiece().y))){
+                    //Wont draw a k on the board if the king is the active piece
+                    ((c != b1.getActivePiece().x) || (r != b1.getActivePiece().y))){
                     string message = "K";
                     glRasterPos2i((width / b1.getSize()) * c + (width / b1.getSize()) / 2 - 9,
                                   (height / b1.getSize()) * r + (height / b1.getSize()) / 2 + 7);
@@ -164,8 +195,32 @@ void display() {
         glRasterPos2i(mouseX - 9, mouseY + 7);
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[0]);
     }
-    glFlush();  // Render now
+}
+
+
+/* Handler for window-repaint event. Call back when the window first appears and
+ whenever the window needs to be re-painted. */
+void display() {
+    // tell OpenGL to use the whole window for drawing
+    glViewport(0, 0, width, height);
+    // do an orthographic parallel projection with the coordinate
+    // system set to first quadrant, limited by screen/window size
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0.0, width, height, 0.0, -1.f, 1.f);
+
+    glClear(GL_COLOR_BUFFER_BIT);   // Clear the color buffer with current clearing color
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    switch(screen) {
+        case start: display_start();
+            break;
+        case game: display_game();
+            break;
     }
+    glFlush();  // Render now
+}
 
 // http://www.theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
 void kbd(unsigned char key, int x, int y)
@@ -175,17 +230,19 @@ void kbd(unsigned char key, int x, int y)
         glutDestroyWindow(wd);
         exit(0);
     }
-    //r will restart the game
-    if (key == 114) {
-        m1.restartGame(b1);
-    }
-    //s will save the game
-    if (key == 115) {
-        m1.saveGame(b1);
-    }
-    //l will load the game
-    if (key == 108) {
-        m1.loadGame("checkersSaveData.txt", b1);
+    if (screen == game) {
+        //r will restart the game
+        if (key == 114) {
+            m1.restartGame(b1);
+        }
+        //s will save the game
+        if (key == 115) {
+            m1.saveGame(b1);
+        }
+        //l will load the game
+        if (key == 108) {
+            m1.loadGame("checkersSaveData.txt", b1);
+        }
     }
 
 
@@ -212,16 +269,20 @@ void kbdS(int key, int x, int y) {
 }
 
 void cursor(int x, int y) {
-    c1.set_position(x, y);
-    mouseX = x;
-    mouseY = y;
-    for (int c = 0; c < b1.getSize(); ++c) {
-        for (int r = 0; r < b1.getSize(); ++r) {
-           if (backGrid[c][r].is_overlapping(x, y) && b1.pieces[c][r]->getColor() == b1.getTurn()){
-               backGrid[c][r].set_fill(1, 1, 0);
-           } else {
-               backGrid[c][r].set_fill(1, 1, 1);
-           }
+    if (screen == game) {
+        c1.set_position(x, y);
+        mouseX = x;
+        mouseY = y;
+        //Changes the color of the board when hovering over a piece whose turn it is.
+        for (int c = 0; c < b1.getSize(); ++c) {
+            for (int r = 0; r < b1.getSize(); ++r) {
+                if (backGrid[c][r].is_overlapping(x, y) && b1.pieces[c][r]->getColor() == b1.getTurn()
+                    && b1.pieces[b1.getActivePiece().x][b1.getActivePiece().y]->getType() == "empty") {
+                    backGrid[c][r].set_fill(1, 1, 0);
+                } else {
+                    backGrid[c][r].set_fill(1, 1, 1);
+                }
+            }
         }
     }
 }
@@ -230,38 +291,45 @@ void cursor(int x, int y) {
 // state will be GLUT_UP or GLUT_DOWN
 void mouse(int button, int state, int x, int y) {
 
-    //Allows for the moving of pieces using mouse clicks
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        for (int c = 0; c < b1.getSize(); ++c) {
-            for (int r = 0; r < b1.getSize(); ++r) {
-                //If it's not an emptyPiece
-                if (grid[c][r].is_overlapping(x, y)
-                    //And the current piece doesn't have another available capture.
-                    && b1.pieces[c][r]->getType() != "empty"
-                    && b1.getBonusMove() == 0
-                    //And it is that piece's turn
-                    && b1.pieces[c][r]->getColor() == b1.getTurn()) {
-                    //Move the piece
-                    b1.setActivePiece(c, r);
-                }
-                //If it is a viable empty piece
-                if (backGrid[c][r].is_overlapping(x, y)
-                    && b1.pieces[c][r]->getType() == "empty"
-                    && c % 2 != r % 2) {
+    //Exits the start screen and begins the game
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && screen == start) {
+        screen = game;
+    }
 
-                    //Move the piece to the new spot
-                    //movePiece method contains game logic
-                    b1.movePiece(b1.getActivePiece().x, b1.getActivePiece().y, c, r);
+    if (screen == game) {
+        //Allows for the moving of pieces using mouse clicks
+        if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+            for (int c = 0; c < b1.getSize(); ++c) {
+                for (int r = 0; r < b1.getSize(); ++r) {
+                    //If it's not an emptyPiece
+                    if (grid[c][r].is_overlapping(x, y)
+                        //And the current piece doesn't have another available capture.
+                        && b1.pieces[c][r]->getType() != "empty"
+                        && b1.getBonusMove() == 0
+                        //And it is that piece's turn
+                        && b1.pieces[c][r]->getColor() == b1.getTurn()) {
+                        //Move the piece
+                        b1.setActivePiece(c, r);
+                    }
+                    //If it is a viable empty piece
+                    if (backGrid[c][r].is_overlapping(x, y)
+                        && b1.pieces[c][r]->getType() == "empty"
+                        && c % 2 != r % 2) {
+
+                        //Move the piece to the new spot
+                        //movePiece method contains game logic
+                        b1.movePiece(b1.getActivePiece().x, b1.getActivePiece().y, c, r);
+                    }
                 }
             }
         }
-    }
-    //Left button sets the piece down. Changes the active piece to an empty piece
-    if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
-        b1.setActivePiece(0, 0);
-        if (b1.getBonusMove() == 1) {
-            b1.passTurn();
-            b1.setBonusMove(0);
+        //Left button sets the piece down. Changes the active piece to an empty piece
+        if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+            b1.setActivePiece(0, 0);
+            if (b1.getBonusMove() == 1) {
+                b1.passTurn();
+                b1.setBonusMove(0);
+            }
         }
     }
     glutPostRedisplay();

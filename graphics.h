@@ -21,6 +21,12 @@ void init(void);
 // Initialize OpenGL Graphics
 void InitGL(void);
 
+// draws the start screen
+void display_start();
+
+// draws all of the game logic
+void display_game();
+
 // Callback functions for GLUT */
 
 // Draw the window - this is where all the GL actions are

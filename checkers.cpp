@@ -8,7 +8,7 @@
 /*
  * Requires: Nothing
  * Modifies: Nothing
- * Effects: Creates a piece
+ * Effects: Creates a piece.
  */
 Piece::Piece(){
     color = 1;
@@ -32,16 +32,6 @@ point Piece::getPosition(){
  */
 int Piece::getColor(){
     return color;
-}
-
-/*
- * Requires: nothing
- * Modifies: nothing
- * Effects: draws the piece
- */
-void Piece::draw(){
-    cout << getType() << " piece is located at ("
-         << getPosition().x << "," << getPosition().y << ")" << endl;
 }
 
 //Constructor
@@ -103,7 +93,7 @@ EmptyPiece::EmptyPiece(point p) : Piece() {
  * Effects: returns type of EmptyPiece
  */
 string EmptyPiece::getType() const {
-    return "empty";
+    return type;
 }
 
 // Constructors
@@ -163,6 +153,7 @@ void Board::upgradePiece(int x, int y){
 
 void Board::movePiece(int x1, int y1, int x2, int y2) {
 
+    //Contains all the logic for when and where pieces can move
     //BLUE BASIC
     if (pieces[x1][y1]->getColor() == 0 && pieces[x1][y1]->getType() == "basic" && turn == 0) {
         //BLUE BASIC MOVE
@@ -424,6 +415,7 @@ void Board::setBonusMove(int x) {
 }
 
 string Board::gameOver() const {
+    //Counts the number of pieces of each color are on the board
     int red = 0;
     int blue = 0;
     for (int c = 0; c < size; ++c) {
@@ -436,12 +428,14 @@ string Board::gameOver() const {
             }
         }
     }
+    //If there are no blue pieces, red wins and visa versa.
     if (blue == 0){
         return "Red Wins!";
     }
     if (red == 0){
         return "Blue Wins!";
     }
+    //Otherwise no one has won
     return "No Win";
 }
 
@@ -451,8 +445,10 @@ string Board::gameOver() const {
  * Effects: Saves the game by storing the positions, types, and colors of all pieces on the board.
  */
 void Menu::saveGame(const Board &b1) {
+    //Output destination
     ofstream f_out("checkersSaveData.txt", ios::app);
     if (f_out) {
+        //Cycles through the board and outputs each pieces color, type and location
         for (int c = 0; c < b1.pieces.size(); c++) {
             for (int r = 0; r < b1.pieces.size(); r++) {
                 f_out << b1.pieces[c][r]->getType() << endl;
@@ -461,6 +457,7 @@ void Menu::saveGame(const Board &b1) {
                 f_out << b1.pieces[c][r]->getColor() << endl;
             }
         }
+        //Outputs the current turn
         f_out << "turn" << endl;
         f_out << b1.getTurn() << endl;
         f_out.close();
@@ -473,8 +470,11 @@ void Menu::saveGame(const Board &b1) {
  * Effects: Loads the last saved game.
  */
 void Menu::loadGame(string fileName, Board &b1) {
+    //Sets the active piece to empty so any piece being held from a previous save is "dropped"
     b1.setActivePiece(0, 0);
     ifstream f_in(fileName);
+    //While the file is being read from, sets the positions, types, and colors of the board
+    //pieces according to the data from the saved file.
     while (f_in) {
         string word = "";
         int tempX;
@@ -499,6 +499,7 @@ void Menu::loadGame(string fileName, Board &b1) {
             f_in >> tempColor;
             b1.pieces[tempX][tempY] = make_unique<KingPiece>(KingPiece(tempColor, {tempX, tempY}));
         }
+        //Sets the turn to the correct turn.
         if (word == "turn") {
             f_in >> tempX;
             b1.setTurn(tempX);

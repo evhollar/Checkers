@@ -66,21 +66,21 @@ void display_start() {
     for (int i = 0; i < message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, message[i]);
     }
+    message = "Jason Campbell";
+    glColor3f(0, 0, 0);
+    glRasterPos2i(width / 2 - 32, height / 2 - 50);
+    for (int i = 0; i < message.length(); ++i) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, message[i]);
+    }
     message = "Evan Hollar";
     glColor3f(0, 0, 0);
-    glRasterPos2i(width / 2 - 27, height / 2 - 50);
+    glRasterPos2i(width / 2 - 27, height / 2 - 30);
     for (int i = 0; i < message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, message[i]);
     }
     message = "Bastien Taylor";
     glColor3f(0, 0, 0);
-    glRasterPos2i(width / 2 - 30, height / 2 - 30);
-    for (int i = 0; i < message.length(); ++i) {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, message[i]);
-    }
-    message = "Jason Campbell";
-    glColor3f(0, 0, 0);
-    glRasterPos2i(width / 2 - 32, height / 2 - 10);
+    glRasterPos2i(width / 2 - 30, height / 2 - 10);
     for (int i = 0; i < message.length(); ++i) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, message[i]);
     }
@@ -114,7 +114,7 @@ void display_game() {
             } else if (b1.pieces[c][r]->getType() == "empty") {
                 if (c % 2 == r % 2) {
                     grid[c][r].set_radius(0);
-                    backGrid[c][r].set_fill(.2, .2, .2);
+                    backGrid[c][r].set_fill(0, 0, 0);
                 } else {
                     grid[c][r].set_radius(0);
                 }
@@ -234,7 +234,7 @@ void display() {
 // http://www.theasciicode.com.ar/ascii-control-characters/escape-ascii-code-27.html
 void kbd(unsigned char key, int x, int y)
 {
-    // escape
+    // escape will exit the window
     if (key == 27) {
         glutDestroyWindow(wd);
         exit(0);
